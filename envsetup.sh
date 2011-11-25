@@ -131,11 +131,10 @@ function check_product()
     fi
 
     if (echo -n $1 | grep -q -e "^bliss_") ; then
-       DU_BUILD=$(echo -n $1 | sed -e 's/^du_//g')
+       bliss_BUILD=$(echo -n $1 | sed -e 's/^bliss_//g')
     else
-       DU_BUILD=
+       bliss_BUILD=
     fi
-    export DU_BUILD
 
         TARGET_PRODUCT=$1 \
         TARGET_BUILD_VARIANT= \
