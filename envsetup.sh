@@ -770,7 +770,7 @@ function tapas()
 function eat()
 {
     if [ "$OUT" ] ; then
-        MODVERSION=`sed -n -e'/ro\.bliss\.version/s/.*=//p' $OUT/system/build.prop`
+        MODVERSION=$(get_build_var BLISS_VERSION)
         ZIPFILE=$(BLISS_VERSION).zip
         ZIPPATH=$OUT/$ZIPFILE
         if [ ! -f $ZIPPATH ] ; then
