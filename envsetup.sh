@@ -542,6 +542,49 @@ function print_lunch_menu()
     echo
 }
 
+function brunch()
+{
+    breakfast $*
+    if [ $? -eq 0 ]; then
+        time mka bacon
+    else
+        echo "No such item in brunch menu. Try 'breakfast'"
+        return 1
+    fi
+    return $?
+}
+
+function breakfast()
+{
+    target=$1
+    BLISS_DEVICES_ONLY="true"
+    unset LUNCH_MENU_CHOICES
+    add_lunch_combo full-eng
+    for f in `/bin/ls vendor/bliss/vendorsetup.sh 2> /dev/null`
+        do
+            echo "including $f"
+            . $f
+        done
+    unset f
+
+    if [ $# -eq 0 ]; then
+        # No arguments, so let's have the full menu
+        lunch
+    else
+        echo "z$target" | grep -q "-"
+        if [ $? -eq 0 ]; then
+            # A buildtype was specified, assume a full device name
+            lunch $target
+        else
+            # This is probably just the bliss model name
+            lunch bliss_$target-userdebug
+        fi
+    fi
+    return $?
+}
+
+alias bib=breakfast
+
 function lunch()
 {
     local answer
@@ -1505,6 +1548,18 @@ function mms() {
             ONE_SHOT_MAKEFILE="__none__" \
                 mk_timer schedtool -B -n 1 -e ionice -n 1 \
                 make -C $T -j $NUM_CPUS "$@"
+            ;;
+    esac
+}
+
+# Make using all available CPUs
+function mka() {
+    case `uname -s` in
+        Darwin)
+            make -j `sysctl hw.ncpu|cut -d" " -f2` "$@"
+            ;;
+        *)
+            schedtool -B -n 1 -e ionice -n 1 make -j `cat /proc/cpuinfo | grep "^processor" | wc -l` "$@"
             ;;
     esac
 }
