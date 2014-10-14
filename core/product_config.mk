@@ -179,19 +179,20 @@ include $(BUILD_SYSTEM)/node_fns.mk
 include $(BUILD_SYSTEM)/product.mk
 include $(BUILD_SYSTEM)/device.mk
 
-ifneq ($(strip $(TARGET_BUILD_APPS)),)
-# An unbundled app build needs only the core product makefiles.
-all_product_configs := $(call get-product-makefiles,\
-    $(SRC_TARGET_DIR)/product/AndroidProducts.mk)
+# A CM build needs only the CM product makefiles.
+ifneq ($(BLISS_BUILD),)
+  all_product_configs := $(shell ls device/*/$(BLISS_BUILD)/cm.mk)
 else
-  ifneq ($(BLISS_BUILD),)
-    all_product_configs := $(shell ls device/*/$(BLISS_BUILD)/bliss.mk)
+  ifneq ($(strip $(TARGET_BUILD_APPS)),)
+  # An unbundled app build needs only the core product makefiles.
+  all_product_configs := $(call get-product-makefiles,\
+      $(SRC_TARGET_DIR)/product/AndroidProducts.mk)
   else
     # Read in all of the product definitions specified by the AndroidProducts.mk
     # files in the tree.
     all_product_configs := $(get-all-product-makefiles)
-  endif
-endif
+  endif # TARGET_BUILD_APPS
+endif # BLISS_BUILD
 
 ifeq ($(BLISS_BUILD),)
 # Find the product config makefile for the current product.
