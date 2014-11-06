@@ -1870,19 +1870,21 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(DISTTOOLS)
 	   $(if $(OEM_OTA_CONFIG), -o $(OEM_OTA_CONFIG)) \
 	   --override_device=$(override_device) \
 	   $(BUILT_TARGET_FILES_PACKAGE) $@
-ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
-	@echo "Running releasetool"
-	$(TARGET_CUSTOM_RELEASETOOL)
-endif
 
-bliss_TARGET_PACKAGE := $(PRODUCT_OUT)/du-$(ROM_VERSION).zip
+bliss_TARGET_PACKAGE := $(PRODUCT_OUT)/bliss-$(ROM_VERSION).zip
 
 .PHONY: otapackage bacon
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
-	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(bliss_TARGET_PACKAGE)
-	$(hide) $(MD5SUM) $(DU_TARGET_PACKAGE) > $(DU_TARGET_PACKAGE).md5sum
-	@echo -e "Package complete: $(DU_TARGET_PACKAGE)"
+ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
+	@echo "Running releasetool"
+	$(hide) $(TARGET_CUSTOM_RELEASETOOL)
+else
+	$(hide) ./vendor/bliss/tools/squisher
+endif
+	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(BLISS_TARGET_PACKAGE)
+	$(hide) $(MD5SUM) $(DU_TARGET_PACKAGE) > $(BLISS_TARGET_PACKAGE).md5sum
+	@echo -e "Package complete: $(BLISS_TARGET_PACKAGE)"
 
 endif    # build_ota_package
 
