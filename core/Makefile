@@ -2038,6 +2038,12 @@ bacon: otapackage
 	@echo -e ""
 endif    # build_ota_package
 
+ifeq ($(BLISS_CHANGELOG),true)
+# Generate Bliss Changelog
+	$(hide) ./vendor/bliss/tools/changelog
+	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/Changelog-$(BLISS_VERSION).txt
+endif
+
 # -----------------------------------------------------------------
 # The update package
 
