@@ -2068,6 +2068,7 @@ bacon: otapackage
 	@echo -e ${CL_CYN}"Have A Truly Blissful Experience"${CL_RST}
 	@echo -e ${CL_CYN}"==============================================="${CL_RST}
 	@echo -e ""
+	$(hide) ./vendor/bliss/tools/otaxml
 endif    # build_ota_package
 
 ifeq ($(BLISS_CHANGELOG),true)
