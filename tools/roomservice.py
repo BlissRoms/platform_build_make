@@ -44,7 +44,7 @@ DEBUG = False
 default_manifest = ".repo/manifest.xml"
 
 custom_local_manifest = ".repo/local_manifests/bliss_manifest.xml"
-bliss_default_revision = "lp5.0"
+bliss_default_revision = "n7.0"
 custom_dependencies = "bliss.dependencies"
 org_manifest = "BlissRoms-Devices"  # leave empty if org is provided in manifest
 org_display = "BlissRoms-Devices"  # needed for displaying
