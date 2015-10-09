@@ -135,6 +135,7 @@ function check_product()
     else
        BLISS_BUILD=
     fi
+    export BLISS_BUILD
 
         TARGET_PRODUCT=$1 \
         TARGET_BUILD_VARIANT= \
