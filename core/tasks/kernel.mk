@@ -209,6 +209,14 @@ KERNEL_MODULES_INSTALL := system
 KERNEL_MODULES_OUT := $(TARGET_OUT)/lib/modules
 endif
 
+ifeq ($(KERNEL_TOOLCHAIN),)
+KERNEL_TOOLCHAIN := $(ARM_EABI_TOOLCHAIN)
+endif
+
+ifeq ($(TARGET_TC_KERNEL),)
+TARGET_TC_KERNEL := 4.9-linaro
+endif
+
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := $(strip $(TARGET_KERNEL_CROSS_COMPILE_PREFIX))
 ifeq ($(TARGET_KERNEL_CROSS_COMPILE_PREFIX),)
 KERNEL_TOOLCHAIN_PREFIX ?= arm-eabi-
@@ -232,6 +240,15 @@ endif
 
 KERNEL_CROSS_COMPILE := CROSS_COMPILE="$(ccache) $(KERNEL_TOOLCHAIN_PATH)"
 ccache =
+
+$(info   -------------------------------------------------------)
+$(info   ----------------- KERNEL INFO -------------------------)
+$(info   -------------------------------------------------------)
+$(info   KERNEL_TOOLCHAIN_PREFIX=$(KERNEL_TOOLCHAIN_PREFIX))
+$(info   KERNEL_TOOLCHAIN=$(KERNEL_TOOLCHAIN))
+$(info   KERNEL_TOOLCHAIN_PATH=$(KERNEL_TOOLCHAIN_PATH))
+$(info   KERNEL_CROSS_COMPILE=$(KERNEL_CROSS_COMPILE))
+$(info   -------------------------------------------------------)
 
 define mv-modules
     mdpath=`find $(KERNEL_MODULES_OUT) -type f -name modules.order`;\
@@ -362,3 +379,6 @@ $(file) : $(KERNEL_BIN) | $(ACP)
 
 ALL_PREBUILT += $(INSTALLED_KERNEL_TARGET)
 endif
+$(info   -------------------------------------------------------)
+$(info   ---------------- KERNEL.MK END ------------------------)
+$(info   -------------------------------------------------------)
