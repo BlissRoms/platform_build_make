@@ -179,9 +179,9 @@ include $(BUILD_SYSTEM)/node_fns.mk
 include $(BUILD_SYSTEM)/product.mk
 include $(BUILD_SYSTEM)/device.mk
 
-# A CM build needs only the CM product makefiles.
-ifneq ($(CM_BUILD),)
-  all_product_configs := $(shell find device -path "*/$(CM_BUILD)/cm.mk")
+# A BLISS build needs only the BLISS product makefiles.
+ifneq ($(BLISS_BUILD),)
+  all_product_configs := $(shell find device -path "*/$(BLISS_BUILD)/bliss.mk")
 else
   ifneq ($(strip $(TARGET_BUILD_APPS)),)
   # An unbundled app build needs only the core product makefiles.
@@ -192,9 +192,9 @@ else
     # files in the tree.
     all_product_configs := $(get-all-product-makefiles)
   endif # TARGET_BUILD_APPS
-endif # CM_BUILD
+endif # BLISS_BUILD
 
-ifeq ($(CM_BUILD),)
+ifeq ($(BLISS_BUILD),)
 # Find the product config makefile for the current product.
 # all_product_configs consists items like:
 # <product_name>:<path_to_the_product_makefile>

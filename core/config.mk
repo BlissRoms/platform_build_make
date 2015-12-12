@@ -410,7 +410,11 @@ JACK_LAUNCHER_JAR := $(HOST_OUT_JAVA_LIBRARIES)/jack-launcher.jar
 JILL_JAR := $(HOST_OUT_JAVA_LIBRARIES)/jill.jar
 JACK_MULTIDEX_DEFAULT_PREPROCESSOR := frameworks/multidex/library/resources/JACK-INF/legacyMultidexInstallation.jpp
 
-LEX := prebuilts/misc/$(BUILD_OS)-$(HOST_PREBUILT_ARCH)/flex/flex-2.5.39
+ifeq ($(USE_HOST_LEX),yes)
+    LEX := flex
+else
+    LEX := prebuilts/misc/$(BUILD_OS)-$(HOST_PREBUILT_ARCH)/flex/flex-2.5.39
+endif
 # The default PKGDATADIR built in the prebuilt bison is a relative path
 # external/bison/data.
 # To run bison from elsewhere you need to set up enviromental variable
@@ -728,10 +732,10 @@ ifneq ($(TARGET_COPY_FILES_OVERRIDES),)
     PRODUCT_COPY_FILES := $(filter-out $(TARGET_COPY_FILES_OVERRIDES), $(PRODUCT_COPY_FILES))
 endif
 
-ifneq ($(CM_BUILD),)
+ifneq ($(BLISS_BUILD),)
 ## We need to be sure the global selinux policies are included
 ## last, to avoid accidental resetting by device configs
-$(eval include vendor/cm/sepolicy/sepolicy.mk)
+$(eval include vendor/bliss/sepolicy/sepolicy.mk)
 
 # Include any vendor specific config.mk file
 -include $(TOPDIR)vendor/*/build/core/config.mk

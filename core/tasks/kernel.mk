@@ -13,6 +13,9 @@
 # limitations under the License.
 
 # Android makefile to build kernel as a part of Android Build
+$(info   -------------------------------------------------------)
+$(info   ---------------- KERNEL.MK START ----------------------)
+$(info   -------------------------------------------------------)
 
 TARGET_AUTO_KDIR := $(shell echo $(TARGET_DEVICE_DIR) | sed -e 's/^device/kernel/g')
 
@@ -163,6 +166,14 @@ KERNEL_HEADERS_INSTALL := $(KERNEL_OUT)/usr
 KERNEL_MODULES_INSTALL := system
 KERNEL_MODULES_OUT := $(TARGET_OUT)/lib/modules
 
+ifeq ($(KERNEL_TOOLCHAIN),)
+KERNEL_TOOLCHAIN := $(ARM_EABI_TOOLCHAIN)
+endif
+
+ifeq ($(TARGET_TC_KERNEL),)
+TARGET_TC_KERNEL := 4.9-linaro
+endif
+
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := $(strip $(TARGET_KERNEL_CROSS_COMPILE_PREFIX))
 ifeq ($(TARGET_KERNEL_CROSS_COMPILE_PREFIX),)
 ifeq ($(KERNEL_TOOLCHAIN_PREFIX),)
@@ -188,6 +199,15 @@ endif
 
 KERNEL_CROSS_COMPILE := CROSS_COMPILE="$(ccache) $(KERNEL_TOOLCHAIN_PATH)"
 ccache =
+
+$(info   -------------------------------------------------------)
+$(info   ----------------- KERNEL INFO -------------------------)
+$(info   -------------------------------------------------------)
+$(info   KERNEL_TOOLCHAIN_PREFIX=$(KERNEL_TOOLCHAIN_PREFIX))
+$(info   KERNEL_TOOLCHAIN=$(KERNEL_TOOLCHAIN))
+$(info   KERNEL_TOOLCHAIN_PATH=$(KERNEL_TOOLCHAIN_PATH))
+$(info   KERNEL_CROSS_COMPILE=$(KERNEL_CROSS_COMPILE))
+$(info   -------------------------------------------------------)
 
 define mv-modules
     mdpath=`find $(KERNEL_MODULES_OUT) -type f -name modules.order`;\
@@ -293,3 +313,6 @@ $(file) : $(KERNEL_BIN) | $(ACP)
 
 ALL_PREBUILT += $(INSTALLED_KERNEL_TARGET)
 endif
+$(info   -------------------------------------------------------)
+$(info   ---------------- KERNEL.MK END ------------------------)
+$(info   -------------------------------------------------------)
