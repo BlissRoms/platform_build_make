@@ -149,7 +149,15 @@ function setpaths()
     # defined in core/config.mk
     targetgccversion=$(get_build_var TARGET_GCC_VERSION)
     targetgccversion2=$(get_build_var 2ND_TARGET_GCC_VERSION)
+    targetgcckernelversion=$(get_build_var TARGET_KERNEL_CUSTOM_TOOLCHAIN)
     export TARGET_GCC_VERSION=$targetgccversion
+
+    if [ -z "$targetgcckernelversion" ]; then
+		targetgcckernelversion="4.9-linaro"
+        export TARGET_GCC_VERSION_KERNEL="4.9-linaro"
+    else
+        export TARGET_GCC_VERSION_KERNEL="$targetgcckernelversion"
+    fi
 
     # The gcc toolchain does not exists for windows/cygwin. In this case, do not reference it.
     export ANDROID_TOOLCHAIN=
@@ -184,7 +192,7 @@ function setpaths()
     case $ARCH in
         arm)
             # Legacy toolchain configuration used for ARM kernel compilation
-            toolchaindir=arm/arm-eabi-$targetgccversion/bin
+            toolchaindir=arm/arm-eabi-$targetgcckernelversion/bin
             if [ -d "$gccprebuiltdir/$toolchaindir" ]; then
                  export ARM_EABI_TOOLCHAIN="$gccprebuiltdir/$toolchaindir"
                  ANDROID_KERNEL_TOOLCHAIN_PATH="$ARM_EABI_TOOLCHAIN":
@@ -194,13 +202,6 @@ function setpaths()
             # No need to set ARM_EABI_TOOLCHAIN for other ARCHs
             ;;
     esac
-
-    targetgcckernelversion=$(get_build_var TARGET_KERNEL_CUSTOM_TOOLCHAIN)
-    if [ -z "$targetgcckernelversion" ]; then
-        export TARGET_GCC_VERSION_KERNEL="4.9-linaro"
-    else
-        export TARGET_GCC_VERSION_KERNEL="$targetgcckernelversion"
-    fi
 
     export ANDROID_DEV_SCRIPTS=$T/development/scripts:$T/prebuilts/devtools/tools:$T/external/selinux/prebuilts/bin
     export ANDROID_BUILD_PATHS=$(get_build_var ANDROID_BUILD_PATHS):$ANDROID_TOOLCHAIN:$ANDROID_TOOLCHAIN_2ND_ARCH:$ANDROID_KERNEL_TOOLCHAIN_PATH$ANDROID_DEV_SCRIPTS:
