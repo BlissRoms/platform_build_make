@@ -197,6 +197,14 @@ function setpaths()
                  ANDROID_KERNEL_TOOLCHAIN_PATH="$ARM_EABI_TOOLCHAIN":
             fi
             ;;
+        arm64)
+            # Legacy toolchain configuration used for ARM64 kernel compilation
+            toolchaindir=aarch64/aarch64-linux-android-$targetgcckernelversion/bin
+            if [ -d "$gccprebuiltdir/$toolchaindir" ]; then
+                 export AARCH64_TOOLCHAIN="$gccprebuiltdir/$toolchaindir"
+                 ANDROID_KERNEL_TOOLCHAIN_PATH="$AARCH64_TOOLCHAIN":
+            fi
+            ;;
         *)
             # No need to set ARM_EABI_TOOLCHAIN for other ARCHs
             ;;
