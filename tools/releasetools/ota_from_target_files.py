@@ -635,17 +635,9 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print("********************************");                              
   script.Print("                                    ");
   builddate = GetBuildProp("ro.build.date", OPTIONS.info_dict)
-# releasetype = GetBuildProp("ro.cm.releasetype", OPTIONS.info_dict)
-# script.Print("*   Release: %s"%(releasetype));
-  script.Print("*   Build date: %s"%(builddate));
-
-# if OPTIONS.override_prop:
-#    product = GetBuildProp("ro.build.product", OPTIONS.info_dict)
-#    script.Print("*   Product: %s"%(product));
-# else:
   device = GetBuildProp("ro.product.device", OPTIONS.info_dict)
-  model = GetBuildProp("ro.product.model", OPTIONS.info_dict)
-  script.Print("    Device: %s (%s)"%(model, device));     
+  script.Print("    Build date: %s"%(builddate));
+  script.Print("    Device: %s "%(device)); 
   script.Print("******************************************");
 
   if OPTIONS.backuptool:
