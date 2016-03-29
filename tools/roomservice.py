@@ -174,16 +174,6 @@ def create_manifest_project(url, directory,
     return project
 
 
-def is_in_manifest(projectpath):
-    try:
-        lm = ElementTree.parse(".repo/local_manifests/roomservice.xml")
-        lm = lm.getroot()
-    except:
-        lm = ElementTree.Element("manifest")
-
-    for localpath in lm.findall("project"):
-        if localpath.get("path") == projectpath:
-            return True
 def create_manifest_remove(url):
     remove = ES.Element("remove-project", attrib={"name": url})
     return remove
