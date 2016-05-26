@@ -461,6 +461,17 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   # Dump fingerprints
   script.Print("Target: %s" % target_fp)
 
+  script.Print("********************************");
+  script.Print("*  ____  _     ___ ____ ____   *");
+  script.Print("* | __ )| |   |_ _/ ___/ ___|  *");
+  script.Print("* |  _ \| |    | |\___ \___ \  *");
+  script.Print("* | |_) | |___ | | ___) |__) | *");
+  script.Print("* |____/|_____|___|____/____/  *");
+  script.Print("*                              *");
+  script.Print("********************************");
+  script.Print("Have A Truly Blissful Experience");
+  script.Print("********************************");   
+  script.AppendExtra("sleep (2);")                          
   script.AppendExtra("ifelse(is_mounted(\"/system\"), unmount(\"/system\"));")
   device_specific.FullOTA_InstallBegin()
 
@@ -475,6 +486,18 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   # by the recovery program.
   if "selinux_fc" in OPTIONS.info_dict:
     WritePolicyConfig(OPTIONS.info_dict["selinux_fc"], output_zip)
+
+    # Bliss Info
+    build = GetBuildProp("ro.build.version.release", OPTIONS.info_dict)
+    date = GetBuildProp("ro.build.date", OPTIONS.info_dict)
+    model = GetBuildProp("ro.product.device", OPTIONS.info_dict)
+    version = GetBuildProp("ro.bliss.version", OPTIONS.info_dict)
+
+    script.Print("***********************************************");
+    script.Print("     Bliss Device: %s"%(model));
+    script.Print("     Version: %s"%(version));
+    script.Print("     Compiled: %s"%(date));
+    script.Print("***********************************************");
 
   recovery_mount_options = OPTIONS.info_dict.get("recovery_mount_options")
 
