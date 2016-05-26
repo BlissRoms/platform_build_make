@@ -624,6 +624,29 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.UnpackPackageDir("install", "/tmp/install")
   script.SetPermissionsRecursive("/tmp/install", 0, 0, 0o755, 0o644, None, None)
   script.SetPermissionsRecursive("/tmp/install/bin", 0, 0, 0o755, 0o755, None, None)
+  
+  script.Print("********************************");
+  script.Print("*  ____  _     ___ ____ ____   *");
+  script.Print("* | __ )| |   |_ _/ ___/ ___|  *");
+  script.Print("* |  _ \| |    | |\___ \___ \  *");
+  script.Print("* | |_) | |___ | | ___) |__) | *");
+  script.Print("* |____/|_____|___|____/____/  *");
+  script.Print("*                              *");
+  script.Print("********************************");                              
+  script.Print("                                    ");
+  builddate = GetBuildProp("ro.build.date", OPTIONS.info_dict)
+# releasetype = GetBuildProp("ro.cm.releasetype", OPTIONS.info_dict)
+# script.Print("*   Release: %s"%(releasetype));
+  script.Print("*   Build date: %s"%(builddate));
+
+# if OPTIONS.override_prop:
+#    product = GetBuildProp("ro.build.product", OPTIONS.info_dict)
+#    script.Print("*   Product: %s"%(product));
+# else:
+  device = GetBuildProp("ro.product.device", OPTIONS.info_dict)
+  model = GetBuildProp("ro.product.model", OPTIONS.info_dict)
+  script.Print("    Device: %s (%s)"%(model, device));     
+  script.Print("******************************************");
 
   if OPTIONS.backuptool:
     script.Mount("/system")
