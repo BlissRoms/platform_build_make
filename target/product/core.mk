@@ -21,11 +21,8 @@
 # core_tiny.mk in addition to core_minimal.mk.
 
 PRODUCT_PACKAGES += \
-    BasicDreams \
     BlockedNumberProvider \
-    BookmarkProvider \
-    Browser2 \
-    Calendar \
+    Calculator \
     CalendarProvider \
     CaptivePortalLogin \
     CertInstaller \
@@ -43,12 +40,9 @@ PRODUCT_PACKAGES += \
     Keyguard \
     Launcher2 \
     ManagedProvisioning \
-    MtpDocumentsProvider \
-    PicoTts \
     PacProcessor \
     libpac \
     PrintSpooler \
-    PrintRecommendationService \
     ProxyHandler \
     Settings \
     SharedStorageBackup \
