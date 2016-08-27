@@ -131,9 +131,9 @@ function check_product()
     fi
 
     if (echo -n $1 | grep -q -e "^bliss_") ; then
-       bliss_BUILD=$(echo -n $1 | sed -e 's/^bliss_//g')
+       BLISS_BUILD=$(echo -n $1 | sed -e 's/^bliss_//g')
     else
-       bliss_BUILD=
+       BLISS_BUILD=
     fi
 
         TARGET_PRODUCT=$1 \
@@ -584,7 +584,7 @@ function brunch()
 function breakfast()
 {
     target=$1
-    bliss_DEVICES_ONLY="true"
+    BLISS_DEVICES_ONLY="true"
     unset LUNCH_MENU_CHOICES
     add_lunch_combo full-eng
     for f in `/bin/ls vendor/bliss/vendorsetup.sh 2> /dev/null`
