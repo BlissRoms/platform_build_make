@@ -217,9 +217,11 @@ _cpm_words :=
 _cpm_word1 :=
 _cpm_word2 :=
 else
-current_product_makefile := $(strip $(all_product_configs))
-all_product_makefiles := $(strip $(all_product_configs))
+    current_product_makefile := $(strip $(all_product_configs))
+    all_product_makefiles := $(strip $(all_product_configs))
 endif
+current_product_makefile := $(strip $(current_product_makefile))
+all_product_makefiles := $(strip $(all_product_makefiles))
 
 load_all_product_makefiles :=
 ifneq (,$(filter product-graph, $(MAKECMDGOALS)))
