@@ -1,4 +1,13 @@
 # Put some miscellaneous rules here
+#
+# Build system colors
+#
+# PFX: Prefix "target C++:" in yellow
+# INS: Module "Install:" output color (cyan for ics)
+
+ifneq ($(BUILD_WITH_COLORS),0)
+    include $(TOP_DIR)build/core/colors.mk
+endif
 
 # HACK: clear LOCAL_PATH from including last build target before calling
 # intermedites-dir-for
