@@ -30,6 +30,15 @@ else
   endif
 endif
 
+# Many qcom modules don't correctly set a dependency on the kernel headers. Fix it for them,
+# but warn the user.
+ifneq (,$(findstring $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include,$(LOCAL_C_INCLUDES)))
+  ifeq (,$(findstring $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr,$(LOCAL_ADDITIONAL_DEPENDENCIES)))
+    $(warning $(LOCAL_MODULE) uses kernel headers, but does not depend on them!)
+    LOCAL_ADDITIONAL_DEPENDENCIES += $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
+  endif
+endif
+
 # The following LOCAL_ variables will be modified in this file.
 # Because the same LOCAL_ variables may be used to define modules for both 1st arch and 2nd arch,
 # we can't modify them in place.
@@ -209,6 +218,8 @@ ifdef LOCAL_CLANG_$($(my_prefix)$(LOCAL_2ND_ARCH_VAR_PREFIX)ARCH)
 my_clang := $(strip $(LOCAL_CLANG_$($(my_prefix)$(LOCAL_2ND_ARCH_VAR_PREFIX)ARCH)))
 endif
 
+my_sdclang := $(strip $(LOCAL_SDCLANG))
+
 # clang is enabled by default for host builds
 # enable it unless we've specifically disabled clang above
 ifdef LOCAL_IS_HOST_MODULE
@@ -251,6 +262,14 @@ endif
 my_cppflags := $(my_cpp_std_version) $(my_cppflags)
 
 
+ifeq ($(SDCLANG),true)
+    ifeq ($(my_sdclang),)
+        ifeq ($(TARGET_USE_SDCLANG),true)
+            my_sdclang := true
+        endif
+    endif
+endif
+
 # arch-specific static libraries go first so that generic ones can depend on them
 my_static_libraries := $(LOCAL_STATIC_LIBRARIES_$($(my_prefix)$(LOCAL_2ND_ARCH_VAR_PREFIX)ARCH)) $(LOCAL_STATIC_LIBRARIES_$(my_32_64_bit_suffix)) $(my_static_libraries)
 my_whole_static_libraries := $(LOCAL_WHOLE_STATIC_LIBRARIES_$($(my_prefix)$(LOCAL_2ND_ARCH_VAR_PREFIX)ARCH)) $(LOCAL_WHOLE_STATIC_LIBRARIES_$(my_32_64_bit_suffix)) $(my_whole_static_libraries)
@@ -261,8 +280,8 @@ include $(BUILD_SYSTEM)/cxx_stl_setup.mk
 ifdef LOCAL_HAL_STATIC_LIBRARIES
 $(foreach lib, $(LOCAL_HAL_STATIC_LIBRARIES), \
     $(eval b_lib := $(filter $(lib).%,$(BOARD_HAL_STATIC_LIBRARIES)))\
-    $(if $(b_lib), $(eval my_static_libraries += $(b_lib)),\
-                   $(eval my_static_libraries += $(lib).default)))
+    $(if $(b_lib), $(eval my_static_libraries := $(b_lib) $(my_static_libraries)),\
+                   $(eval my_static_libraries := $(lib).default $(my_static_libraries))))
 b_lib :=
 endif
 
@@ -326,6 +345,14 @@ my_target_global_cflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_TARGET_GLOBAL_CFL
 my_target_global_conlyflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_TARGET_GLOBAL_CONLYFLAGS)
 my_target_global_cppflags += $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_TARGET_GLOBAL_CPPFLAGS)
 my_target_global_ldflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_TARGET_GLOBAL_LDFLAGS)
+    ifeq ($(my_sdclang),true)
+        ifeq ($(strip $(my_cc)),)
+            my_cc := $(SDCLANG_PATH)/clang $(SDLLVM_AE_FLAG) -Wno-vectorizer-no-neon
+        endif
+        ifeq ($(strip $(my_cxx)),)
+            my_cxx := $(SDCLANG_PATH)/clang++ $(SDLLVM_AE_FLAG) -Wno-vectorizer-no-neon
+        endif
+    endif
 else
 my_target_global_cflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)TARGET_GLOBAL_CFLAGS)
 my_target_global_conlyflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)TARGET_GLOBAL_CONLYFLAGS)
@@ -655,13 +682,25 @@ proto_sources_fullpath := $(addprefix $(LOCAL_PATH)/, $(proto_sources))
 proto_generated_cpps := $(addprefix $(proto_gen_dir)/, \
     $(patsubst %.proto,%.pb$(my_proto_source_suffix),$(proto_sources_fullpath)))
 
+define copy-proto-files
+$(if $(PRIVATE_PROTOC_OUTPUT), \
+   $(if $(call streq,$(PRIVATE_PROTOC_INPUT),$(PRIVATE_PROTOC_OUTPUT)),, \
+   $(eval proto_generated_path := $(dir $(subst $(PRIVATE_PROTOC_INPUT),$(PRIVATE_PROTOC_OUTPUT),$@)))
+   @mkdir -p $(dir $(proto_generated_path))
+   @echo "Protobuf relocation: $(basename $@).h => $(proto_generated_path)"
+   @cp -f $(basename $@).h $(proto_generated_path) ),)
+endef
+
 # Ensure the transform-proto-to-cc rule is only defined once in multilib build.
 ifndef $(my_host)$(LOCAL_MODULE_CLASS)_$(LOCAL_MODULE)_proto_defined
 $(proto_generated_cpps): PRIVATE_PROTO_INCLUDES := $(TOP)
 $(proto_generated_cpps): PRIVATE_PROTOC_FLAGS := $(LOCAL_PROTOC_FLAGS) $(my_protoc_flags)
+$(proto_generated_cpps): PRIVATE_PROTOC_OUTPUT := $(LOCAL_PROTOC_OUTPUT)
+$(proto_generated_cpps): PRIVATE_PROTOC_INPUT := $(LOCAL_PATH)
 $(proto_generated_cpps): PRIVATE_RENAME_CPP_EXT := $(my_rename_cpp_ext)
 $(proto_generated_cpps): $(proto_gen_dir)/%.pb$(my_proto_source_suffix): %.proto $(my_protoc_deps) $(PROTOC)
 	$(transform-proto-to-cc)
+	$(copy-proto-files)
 
 $(my_host)$(LOCAL_MODULE_CLASS)_$(LOCAL_MODULE)_proto_defined := true
 endif
