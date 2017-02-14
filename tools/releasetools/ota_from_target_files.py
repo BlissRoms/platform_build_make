@@ -513,6 +513,22 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.ShowProgress(0.05, 5)
   script.WriteRawImage("/boot", "boot.img")
 
+  #if OPTIONS.info_dict.get("default_root_method") == "magisk":
+    #script.Print(" ")
+    #script.Print("Flashing Magisk...")
+    #script.Print(" ")
+    #common.ZipWriteStr(output_zip, "magisk/magisk.zip",
+    #               ""+input_zip.read("SYSTEM/addon.d/magisk.zip"))
+    #script.FlashMagisk()
+    #script.Print(" ")
+
+  if OPTIONS.info_dict.get("default_root_method") == "supersu":
+    script.Print("Flashing SuperSU...")
+    common.ZipWriteStr(output_zip, "supersu/supersu.zip",
+                   ""+input_zip.read("SYSTEM/addon.d/supersu.zip"))
+    script.FlashSuperSU()
+    script.Print("SuperSU Flash Completed")
+
   script.ShowProgress(0.2, 10)
   device_specific.FullOTA_InstallEnd()
 
