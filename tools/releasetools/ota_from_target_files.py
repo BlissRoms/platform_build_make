@@ -802,7 +802,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
      script.Print("Flashing Boot Image...")
      script.WriteRawImage("/boot", "boot.img")
 
-  if block_based:
+  if OPTIONS.info_dict.get("default_root_method") == "magisk":
     script.Print(" ")
     script.Print("Flashing Magisk...")
     script.Print(" ")
@@ -810,6 +810,17 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
                    ""+input_zip.read("SYSTEM/addon.d/magisk.zip"))
     script.FlashMagisk()
     script.Print(" ")
+
+  if OPTIONS.info_dict.get("default_root_method") == "supersu":
+    script.Print("Flashing SuperSU...")
+    common.ZipWriteStr(output_zip, "supersu/supersu.zip",
+                   ""+input_zip.read("SYSTEM/addon.d/supersu.zip"))
+    script.FlashSuperSU()
+    # SuperSU leave /system unmounted while we need it mounted here to avoid
+    # a warning from non-Multirom TWRP
+    if block_based:
+      script.Mount("/system")
+
   script.ShowProgress(0.2, 10)
   device_specific.FullOTA_InstallEnd()
 
