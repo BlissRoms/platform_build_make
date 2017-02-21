@@ -1073,7 +1073,7 @@ endif;
 
   common.ZipWriteStr(output_zip, "system/build.prop",
                      ""+input_zip.read("SYSTEM/build.prop"))
-  common.ZipWriteStr(output_zip, "META-INF/org/potatoos/releasekey",
+  common.ZipWriteStr(output_zip, "META-INF/org/cosmicos/releasekey",
                      ""+input_zip.read("META/releasekey.txt"))
 
   # We haven't written the metadata entry, which will be done in

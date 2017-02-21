@@ -3728,10 +3728,11 @@ endif
 $(BUILT_OTATOOLS_PACKAGE): $(OTATOOLS) $(OTATOOLS_DEPS) $(OTATOOLS_RELEASETOOLS) $(SOONG_ZIP)
 	@echo "Package OTA tools: $@"
 	$(hide) rm -rf $@ $(zip_root)
-	$(hide) mkdir -p $(dir $@) $(zip_root)/bin $(zip_root)/framework $(zip_root)/releasetools
+	$(hide) mkdir -p $(dir $@) $(zip_root)/bin $(zip_root)/framework $(zip_root)/releasetools $(zip_root)/vendor/cos/build/tools
 	$(call copy-files-with-structure,$(OTATOOLS),$(HOST_OUT)/,$(zip_root))
 	$(hide) cp $(SOONG_ZIP) $(zip_root)/bin/
 	$(hide) cp -r -d -p build/make/tools/releasetools/* $(zip_root)/releasetools
+	$(hide) cp -p vendor/cos/build/tools/getb64key.py $(zip_root)/vendor/cos/build/tools/
 	$(hide) rm -rf $@ $(zip_root)/releasetools/*.pyc
 	$(hide) $(SOONG_ZIP) -o $@ -C $(zip_root) -D $(zip_root) \
 	  -C . $(addprefix -f ,$(OTATOOLS_DEPS))
@@ -4232,9 +4233,9 @@ endif # INSTALLED_DTBOIMAGE_TARGET
 	$(hide) $(foreach part,$(BOARD_PACK_RADIOIMAGES), \
 	    echo $(part) >> $(zip_root)/META/pack_radioimages.txt;)
 ifdef PRODUCT_DEFAULT_DEV_CERTIFICATE
-	$(hide) vendor/potato/build/tools/getb64key.py $(PRODUCT_DEFAULT_DEV_CERTIFICATE).x509.pem > $(zip_root)/META/releasekey.txt
+	$(hide) vendor/cos/build/tools/getb64key.py $(PRODUCT_DEFAULT_DEV_CERTIFICATE).x509.pem > $(zip_root)/META/releasekey.txt
 else
-	$(hide) vendor/potato/build/tools/getb64key.py $(DEFAULT_SYSTEM_DEV_CERTIFICATE).x509.pem > $(zip_root)/META/releasekey.txt
+	$(hide) vendor/cos/build/tools/getb64key.py $(DEFAULT_SYSTEM_DEV_CERTIFICATE).x509.pem > $(zip_root)/META/releasekey.txt
 endif
 	@# Zip everything up, preserving symlinks and placing META/ files first to
 	@# help early validation of the .zip file while uploading it.
@@ -4366,7 +4367,7 @@ endif
 ifeq ($(WITH_GMS),true)
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
 else
-ifneq ($(POTATO_BUILD),)
+ifneq ($(COSMIC_BUILD),)
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
 else
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
