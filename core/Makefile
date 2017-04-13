@@ -2082,6 +2082,7 @@ ifeq ($(BLISS_CHANGELOG),true)
 # Generate Bliss Changelog
 	$(hide) ./vendor/bliss/tools/changelog
 	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/Changelog-$(BLISS_VERSION).txt
+	$(hide) cp $(PRODUCT_OUT)/Changelog-$(BLISS_VERSION).txt $(PRODUCT_OUT)/system/etc/Changelog.txt
 endif
 
 # -----------------------------------------------------------------
