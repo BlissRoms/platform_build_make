@@ -679,7 +679,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     # Bliss Info
     build = GetBuildProp("ro.build.version.release", OPTIONS.info_dict)
     date = GetBuildProp("ro.build.date", OPTIONS.info_dict)
-    model = GetBuildProp("ro.product.model", OPTIONS.info_dict)
+    model = GetBuildProp("ro.product.device", OPTIONS.info_dict)
     version = GetBuildProp("ro.bliss.version", OPTIONS.info_dict)
 
     script.Print("***********************************************");
