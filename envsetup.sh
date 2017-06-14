@@ -1770,3 +1770,5 @@ done
 unset f
 
 addcompletions
+
+. vendor/bliss/tools/root.sh
