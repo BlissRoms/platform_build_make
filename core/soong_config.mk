@@ -63,6 +63,8 @@ $(call add_json_bool, Eng,                               $(filter eng,$(TARGET_B
 $(call add_json_str,  BuildType,                         $(TARGET_BUILD_TYPE))
 
 $(call add_json_str,  DeviceName,                        $(TARGET_DEVICE))
+$(call add_json_str,  BlissDeviceName,                 $(TARGET_DEVICE))
+
 $(call add_json_str,  DeviceProduct,                     $(TARGET_PRODUCT))
 $(call add_json_str,  DeviceArch,                        $(TARGET_ARCH))
 $(call add_json_str,  DeviceArchVariant,                 $(TARGET_ARCH_VARIANT))
@@ -345,6 +347,9 @@ $(call add_json_list, ProductDefaultWifiChannels, $(PRODUCT_DEFAULT_WIFI_CHANNEL
 $(call add_json_bool, BoardUseVbmetaDigestInFingerprint, $(filter true,$(BOARD_USE_VBMETA_DIGTEST_IN_FINGERPRINT)))
 
 $(call add_json_list, OemProperties, $(PRODUCT_OEM_PROPERTIES))
+
+# Unsure about this
+$(call add_json_list, BlissDevice, $(TARGET_DEVICE))
 
 $(call json_end)
 
