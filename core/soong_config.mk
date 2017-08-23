@@ -86,6 +86,7 @@ $(SOONG_VARIABLES): FORCE bliss_soong
 	echo ''; \
 	echo '    "ArtUseReadBarrier": $(if $(filter false,$(PRODUCT_ART_USE_READ_BARRIER)),false,true),'; \
 	echo ''; \
+        echo '    "ForcedShimLibs": "$(LINKER_FORCED_SHIM_LIBS)",'; \
 	echo '    "BtConfigIncludeDir": "$(BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR)",'; \
 	echo ''; \
 	echo '    "DeviceKernelHeaders": $(call json_list,$(strip $(TARGET_PROJECT_SYSTEM_INCLUDES)))'; \
