@@ -720,6 +720,14 @@ def AddCompatibilityArchiveIfTrebleEnabled(target_zip, output_zip, target_info,
 
   AddCompatibilityArchive(system_updated, vendor_updated)
 
+def CopyInstallTools(output_zip):
+  oldcwd = os.getcwd()
+  os.chdir(os.getenv('OUT'))
+  for root, subdirs, files in os.walk("install"):
+    for f in files:
+      p = os.path.join(root, f)
+      output_zip.write(p, p)
+  os.chdir(oldcwd)
 
 def CopyInstallTools(output_zip):
   install_path = os.path.join(OPTIONS.input_tmp, "INSTALL")
