@@ -62,4 +62,6 @@ echo "ro.build.characteristics=$TARGET_AAPT_CHARACTERISTICS"
 
 echo "ro.bliss.device=$BLISS_DEVICE"
 
+echo "ro.bliss.product.arch=$BLISS_TARGET_ARCH"
+
 echo "# end build properties"
