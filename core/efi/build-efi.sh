@@ -119,6 +119,7 @@ repo sync -c -j$jobs --force-sync
 fi
 
 rm -f device/*/sepolicy/common/private/genfs_contexts
+rm -f vendor/bliss/build/tasks/kernel.mk
 
 blissHeader(){
         file_size=$(echo "${filesize}" | awk '{ split( "B KB MB GB TB PB" , v ); s=1; while( $1>1024 ){ $1/=1024; s++ } printf "%.2f %s", $1, v[s] }')
