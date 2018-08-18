@@ -43,7 +43,9 @@
   </project>
   <project name="device-intel-build" path="device/intel/build" remote="celadon" revision="master" />
   <project name="libva" path="vendor/intel/external/project-celadon/libva" remote="celadon" revision="stable" />
-  <project name="vendor-intel-utils" path="vendor/intel/utils" remote="celadon" revision="master" />
+  -->
+  <project name="vendor-intel-utils" path="vendor/intel/utils" remote="BR-x86" revision="p9.0" />
+  <!--
   -->
   <!--project name="vaapi" path="vendor/intel/external/project-celadon/vaapi" remote="celadon" revision="master" /-->
   <!--
