@@ -82,6 +82,22 @@ do
   shift
 done
 
+
+if [ "$1" = "user" ];then
+        bliss_variant=celadon-user;
+        bliss_variant_name=generic;
+
+elif [ "$1" = "userdebug" ];then
+        bliss_variant=celadon-userdebug;
+        bliss_variant_name=generic;
+
+elif [ "$1" = "eng" ];then
+        bliss_variant=celadon-eng;
+        bliss_variant_name=generic;
+
+fi
+
+
 if [ "$2" = "" ];then
    romBranch="p9.0"
    echo "Using branch $romBranch for repo syncing Bliss."
@@ -129,14 +145,16 @@ blissHeader(){
         echo -e ""
 }
 
-if [[ "$1" = "efi" ]];then
+if [[ "$1" = "user" || "$1" = "userdebug" || "$1" = "eng" ]];then
 echo "$1"
 . build/envsetup.sh
-mka project_celadon-efi
 fi
 
 buildVariant() {
-        mka project_celadon-efi
+	lunch $1
+	mka project_celadon-efi
 }
 
-
+if [[ "$1" = "user" || "$1" = "userdebug" || "$1" = "eng" ]];then
+buildVariant $bliss_variant $bliss_variant_name
+fi
