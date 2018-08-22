@@ -5,7 +5,7 @@ rompath=$(pwd)
 mkdir -p release/$rom_fp/
 set -e
 
-localManifestBranch="android-9.0"
+localManifestBranch="p9.0"
 rom="bliss"
 bliss_variant=""
 bliss_variant_name=""
