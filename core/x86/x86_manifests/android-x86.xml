@@ -117,5 +117,8 @@
   <project path="device/sample" name="device/sample" remote="aosp" groups="pdk" /> 
   <project groups="aosp,pdk" name="platform/hardware/bsp/intel" path="hardware/bsp/intel" remote="aosp" revision="refs/tags/android-7.1.1_r6" />
   
+  <!-- START X86 INSTALLER -->
+  <project path="x86_installer" name="BlissRoms-x86/Androidx86-Installer-for-Windows" revision="master" remote="github" /> -->
+  <!-- END X86 INSTALLER -->
 
 </manifest>
