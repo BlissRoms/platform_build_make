@@ -137,6 +137,11 @@ elif [ "$2" = "gapps" ];then
    export USE_OPENGAPPS=true
    echo "Building with OpenGapps included"
    
+elif [ "$2" = "none" ];then
+   export USE_FOSS=false
+   export USE_OPENGAPPS=false
+   echo "Building with no app stores"
+   
 else
    romBranch="$2"
    echo "Using branch $romBranch for repo syning Bliss."
