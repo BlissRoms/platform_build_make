@@ -25,7 +25,7 @@ export LC_ALL=C
 
 if [[ $(uname -s) = "Darwin" ]];then
         jobs=$(sysctl -n hw.ncpu)
- elif [[ $(uname -s) = "Linux" ]];then
+elif [[ $(uname -s) = "Linux" ]];then
         jobs=$(nproc)
 fi
 
@@ -36,13 +36,14 @@ do
 
   # Normal option processing
     -h | --help)
-      echo "Usage: $0 options buildVariants blissBranch"
+      echo "Usage: $0 options buildVariants blissBranch/extras"
       echo "options: -s | --sync: Repo syncs the rom (clears out patches), then reapplies patches to needed repos"
       echo ""
       echo "buildVariants: "
       echo "android_x86-user, android_x86-userdebug, android_x86-eng,  "
       echo "android_x86_64-user, android_x86_64-userdebug, android_x86_64-eng"
       echo "blissBranch: select which bliss branch to sync, default is o8.1-los"
+      echo "extras: specify 'foss' or 'gapps' to be built in"
       ;;
     -c | --clean)
       clean="y";
@@ -125,10 +126,14 @@ if [ "$2" = "" ];then
    echo "Using branch $romBranch for repo syncing Bliss."
    
 elif [ "$2" = "foss" ];then
+   export USE_OPENGAPPS=false
    export USE_FOSS=true
+   echo "Building with FDroid & microG included"
    
 elif [ "$2" = "gapps" ];then
+   export USE_FOSS=false
    export USE_OPENGAPPS=true
+   echo "Building with OpenGapps included"
    
 else
    romBranch="$2"
