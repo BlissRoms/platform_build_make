@@ -154,6 +154,9 @@ if  [ $sync == "y" ];then
 	fi
 	
 	repo sync -c -j$jobs --no-tags --no-clone-bundle --force-sync
+	
+else 
+	echo "there's an error Bob"
 fi
 
 if [ $clean == "y" ];then
