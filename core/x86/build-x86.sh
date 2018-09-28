@@ -117,6 +117,8 @@ elif [ "$1" = "android_x86-userdebug" ];then
 elif [ "$1" = "android_x86-eng" ];then
         bliss_variant=android_x86-eng;
         bliss_variant_name=android_x86-eng;
+else
+	echo "you need to at least use '--help'"
 
 fi
 
