@@ -161,31 +161,38 @@ if  [ $sync == "y" ];then
 	repo sync -c -j$jobs --no-tags --no-clone-bundle --force-sync
 	
 else 
-	echo "there's an error Bob"
+	echo "Not gonna sync this round"
 fi
 
 if [ $clean == "y" ];then
+	echo "Cleaning up a bit"
     make clean && make clobber 
 fi
 
 if  [ $sync == "y" ];then
+	echo "Let the patching begin"
 	bash "$rompath/vendor/x86/utils/autopatch.sh"
 fi
 
 if  [ $patch == "y" ];then
+	echo "Let the patching begin"
 	bash "$rompath/vendor/x86/utils/autopatch.sh"
 fi
 
+echo "Removing: device/*/sepolicy/common/private/genfs_contexts"
 rm -f device/*/sepolicy/common/private/genfs_contexts
+echo "Removing: vendor/bliss/build/tasks/kernel.mk"
 rm -f vendor/bliss/build/tasks/kernel.mk
 
 if [[ "$1" = "android_x86_64-user" || "$1" = "android_x86_64-userdebug" || "$1" = "android_x86_64-eng" || "$1" = "android_x86-user" || "$1" = "android_x86-userdebug" || "$1" = "android_x86-eng" ]];then
-echo "$1"
+echo "Setting up build env for: $1"
 	. build/envsetup.sh
 fi
 
 buildVariant() {
+	echo "Starting lunch command for: $1"
 	lunch $1
+	echo "Starting up the build... This may take a while..."
 	mka iso_img
 }
 
