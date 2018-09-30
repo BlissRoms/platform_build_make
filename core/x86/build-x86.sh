@@ -179,31 +179,6 @@ fi
 rm -f device/*/sepolicy/common/private/genfs_contexts
 rm -f vendor/bliss/build/tasks/kernel.mk
 
-blissHeader(){
-        file_size=$(echo "${filesize}" | awk '{ split( "B KB MB GB TB PB" , v ); s=1; while( $1>1024 ){ $1/=1024; s++ } printf "%.2f %s", $1, v[s] }')
-        echo -e ""
-        echo -e "      ___           ___                   ___           ___      "
-        echo -e "     /\  \         /\__\      ___        /\  \         /\  \     "
-        echo -e "    /::\  \       /:/  /     /\  \      /::\  \       /::\  \    "
-        echo -e "   /:/\:\  \     /:/  /      \:\  \    /:/\ \  \     /:/\ \  \   "
-        echo -e "  /::\~\:\__\   /:/  /       /::\__\  _\:\~\ \  \   _\:\~\ \  \  "
-        echo -e " /:/\:\ \:\__\ /:/__/     __/:/\/__/ /\ \:\ \ \__\ /\ \:\ \ \__\ "
-        echo -e " \:\~\:\/:/  / \:\  \    /\/:/  /    \:\ \:\ \/__/ \:\ \:\ \/__/ "
-        echo -e "  \:\ \::/  /   \:\  \   \::/__/      \:\ \:\__\    \:\ \:\__\   "
-        echo -e "   \:\/:/  /     \:\  \   \:\__\       \:\/:/  /     \:\/:/  /   "
-        echo -e "    \::/__/       \:\__\   \/__/        \::/  /       \::/  /    "
-        echo -e "     ~~            \/__/                 \/__/         \/__/     "
-        echo -e ""
-        echo -e "===========-Bliss Package Complete-==========="
-        echo -e "File: $1"
-        echo -e "MD5: $3"
-        echo -e "Size: $file_size"
-        echo -e "==============================================="
-        echo -e "Have A Truly Blissful Experience"
-        echo -e "==============================================="
-        echo -e ""
-}
-
 if [[ "$1" = "android_x86_64-user" || "$1" = "android_x86_64-userdebug" || "$1" = "android_x86_64-eng" || "$1" = "android_x86-user" || "$1" = "android_x86-userdebug" || "$1" = "android_x86-eng" ]];then
 echo "$1"
 	. build/envsetup.sh
@@ -212,7 +187,6 @@ fi
 buildVariant() {
 	lunch $1
 	mka iso_img
-	blissHeader $filename $filesize $md5sum_file
 }
 
 if [[ "$1" = "android_x86_64-user" || "$1" = "android_x86_64-userdebug" || "$1" = "android_x86_64-eng" || "$1" = "android_x86-user" || "$1" = "android_x86-userdebug" || "$1" = "android_x86-eng" ]];then
