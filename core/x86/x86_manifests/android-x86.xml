@@ -49,7 +49,7 @@
   <project path="kernel" name="kernel/common" remote="x86" revision="kernel-4.14" />
   <project path="kernel" name="kernel_common" remote="BR-x86" revision="k4.16.14-bliss-ipts-ga" />
 -->
-  <project path="kernel" name="kernel/common" remote="x86" revision="kernel-4.9" />
+  <project path="kernel" name="kernel_common" remote="BR-x86" revision="kernel-4.9" />
   
   <project path="device/generic/firmware" name="platform_device_generic_firmware" remote="BR-x86" revision="dev-kernel.org" />
   
