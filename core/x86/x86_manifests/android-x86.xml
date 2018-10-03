@@ -91,6 +91,7 @@
 -->
   <project path="external/drm_gralloc" name="platform_external_drm_gralloc" remote="BR-x86" revision="p9.0" />
   <project path="external/gbm_gralloc" name="platform/external/gbm_gralloc" remote="x86" revision="oreo-x86" />
+  <project path="external/ffmpeg" name="platform/external/ffmpeg" remote="x86" revision="oreo-x86" />
   <project path="external/libdrm" name="platform/external/libdrm" remote="x86" revision="oreo-x86" />
   <project path="external/swiftshader" name="platform/external/swiftshader" remote="x86" revision="oreo-x86" />
   <project path="external/ntfs-3g" name="platform_external_ntfs-3g" remote="BR-x86" revision="p9.0" />
