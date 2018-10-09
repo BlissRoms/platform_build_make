@@ -99,8 +99,8 @@
   <project path="external/v86d" name="platform_external_v86d" remote="BR-x86" revision="p9.0" />
   <project path="hardware/gps" name="platform_hardware_gps" remote="BR-x86" revision="p9.0" />
   <project path="hardware/intel/audio_media" name="platform/hardware/intel/audio_media" remote="x86" revision="oreo-x86" />
-  <project path="hardware/intel/common/libva" name="platform_hardware_intel_common_libva" remote="BR-x86" revision="p9.0" />
-  <project path="hardware/intel/common/vaapi" name="platform_hardware_intel_common_vaapi" remote="BR-x86" revision="p9.0" />
+  <project path="hardware/intel/common/libva" name="platform_hardware_intel_common_libva" remote="BR-x86" revision="libva_2.3.0" />
+  <project path="hardware/intel/common/vaapi" name="platform_hardware_intel_common_vaapi" remote="BR-x86" revision="vaapi_2.2.0" />
   <project path="hardware/intel/libsensors" name="platform/hardware/intel/libsensors" remote="x86" revision="oreo-x86" />
   <project path="hardware/libaudio" name="platform_hardware_libaudio" remote="BR-x86" revision="p9.0" />
   <project path="hardware/libcamera" name="platform_hardware_libcamera" remote="BR-x86" revision="p9.0" />
