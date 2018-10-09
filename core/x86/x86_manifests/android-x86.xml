@@ -61,7 +61,7 @@
   <project path="external/llvm70" name="platform/external/llvm" remote="x86" revision="oreo-x86" />
   -->
   
-  <project path="external/mesa" name="platform_mesa" remote="BR-x86" revision="18.3.0-devel_w33" />
+  <project path="external/mesa" name="platform_mesa" remote="BR-x86" revision="m18.3.0-devel_w40_LLVM70" />
   <project path="external/llvm70" name="llvm" remote="maurossi" revision="oreo-x86_llvm70_release_70" groups="pdk" />
   
   <!-- From Android-x86 repositories -->
