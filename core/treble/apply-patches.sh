@@ -1,33 +1,107 @@
 #!/bin/bash
+# -*- coding: utf-8; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
-set -e
+# autopatch.sh: script to manage patches on top of repo
+# Copyright (c) 2018, Intel Corporation.
+# Author: sgnanase <sundar.gnanasekaran@intel.com>
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms and conditions of the GNU General Public License,
+# version 2, as published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+# more details.
 
-patches="$(readlink -f -- $1)"
+top_dir=`pwd`
+utils_dir="$(readlink -f -- $1)"
+patch_dir="$utils_dir/patches"
+private_utils_dir="$top_dir/vendor/bliss/PRIVATE/utils"
+private_patch_dir="$private_utils_dir/android_p/google_diff/$TARGET_PRODUCT"
 
-for project in $(cd $patches/patches; echo *);do
-	p="$(tr _ / <<<$project |sed -e 's;platform/;;g')"
-	[ "$p" == build ] && p=build/make
-	repo sync -l --force-sync $p
-	pushd $p
-	git clean -fdx; git reset --hard
-	for patch in $patches/patches/$project/*.patch;do
-		#Check if patch is already applied
-		if patch -f -p1 --dry-run -R < $patch > /dev/null;then
-			continue
-		fi
+current_project=""
+previous_project=""
+conflict=""
+conflict_list=""
 
-		if git apply --check $patch;then
-			git am $patch
-		elif patch -f -p1 --dry-run < $patch > /dev/null;then
-			#This will fail
-			git am $patch || true
-			patch -f -p1 < $patch
-			git add -u
-			git am --continue
-		else
-			echo "Failed applying $patch"
-		fi
-	done
-	popd
-done
+apply_patch() {
 
+  pl=$1
+  pd=$2
+
+  echo ""
+  echo "Applying Patches"
+
+  for i in $pl
+  do
+    current_project=`dirname $i`
+    if [[ $current_project != $previous_project ]]; then
+      echo ""
+      echo ""
+      echo "Project $current_project"
+    fi
+    previous_project=$current_project
+
+    cd $top_dir/$current_project
+    remote=`git remote -v | grep "https://android.googlesource.com/"`
+    if [[ -z "$remote" ]]; then
+      default_revision="remotes/m/master"
+    else
+      if [[ -f "$top_dir/.repo/manifest.xml" ]]; then
+        default_revision=`grep default $top_dir/.repo/manifest.xml | grep -o 'revision="[^"]\+"' | cut -d'=' -f2 | sed 's/\"//g'`
+      else
+        echo "Please make sure .repo/manifest.xml"
+        # return 1
+      fi
+    fi
+
+    cd $top_dir/$current_project
+    a=`grep "Date: " $pd/$i`
+    b=`echo ${a#"Date: "}`
+    c=`git log --pretty=format:%aD | grep "$b"`
+
+    if [[ "$c" == "" ]] ; then
+      git am -3 $pd/$i >& /dev/null
+      if [[ $? == 0 ]]; then
+        echo "        Applying          $i"
+      else
+        echo "        Conflicts          $i"
+        git am --abort >& /dev/null
+        conflict="y"
+        conflict_list="$current_project $conflict_list"
+      fi
+    else
+      echo "        Already applied         $i"
+    fi
+  done
+}
+
+#Apply common patches
+cd $patch_dir
+patch_list=`find * -iname "*.patch" | sort -u`
+apply_patch "$patch_list" "$patch_dir"
+
+#Apply Embargoed patches if exist
+if [[ -d "$private_patch_dir" ]]; then
+    echo ""
+    echo "Embargoed Patches Found"
+    cd $private_patch_dir
+    private_patch_list=`find * -iname "*.patch" | sort -u`
+    apply_patch "$private_patch_list" "$private_patch_dir"
+fi
+
+echo ""
+if [[ "$conflict" == "y" ]]; then
+  echo "==========================================================================="
+  echo "           ALERT : Conflicts Observed while patch application !!           "
+  echo "==========================================================================="
+  for i in $conflict_list ; do echo $i; done | sort -u
+  echo "==========================================================================="
+  echo "WARNING: Please resolve Conflict(s). You may need to re-run build..."
+  # return 1
+else
+  echo "==========================================================================="
+  echo "           INFO : All patches applied fine !!                              "
+  echo "==========================================================================="
+fi
