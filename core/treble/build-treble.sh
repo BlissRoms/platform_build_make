@@ -63,6 +63,10 @@ do
       sync="y"
       echo "Repo syncing and patching selected."
       ;;
+    -p | --patch)
+      patch="y";
+      echo "patching selected."
+      ;;
   # ...
 
   # Special cases
@@ -134,6 +138,8 @@ elif [ "$1" = "arm64_ab_go" ];then
         bliss_variant=treble_arm64_boS-userdebug;
         bliss_variant_name=arm64-ab-go;
         bliss_partition="ab";
+else
+	echo "you need to at least use '--help'"
 fi
 
 if [ "$2" = "" ];then
@@ -179,6 +185,12 @@ else
     mkdir patches
     unzip  "$local_patches" -d patches
 fi
+echo "Let the patching begin"
+bash "$rompath/build/make/core/treble/apply-patches.sh" $rompath/patches
+fi
+
+if [[ $patch == "y" ]];then
+echo "Let the patching begin"
 bash "$rompath/build/make/core/treble/apply-patches.sh" $rompath/patches
 fi
 
