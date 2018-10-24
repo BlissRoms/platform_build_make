@@ -3,6 +3,7 @@
 rom_fp="$(date +%y%m%d)"
 rompath=$(pwd)
 mkdir -p release/$rom_fp/
+# Comment out 'set -e' if your session terminates. 
 set -e
 
 localManifestBranch="p9.0"
@@ -15,7 +16,9 @@ filename=""
 file_size=""
 clean="n"
 sync="n"
+patch="n"
 romBranch=""
+ver=$(date +"%F")
 
 if [ -z "$USER" ];then
         export USER="$(id -un)"
@@ -24,7 +27,7 @@ export LC_ALL=C
 
 if [[ $(uname -s) = "Darwin" ]];then
         jobs=$(sysctl -n hw.ncpu)
- elif [[ $(uname -s) = "Linux" ]];then
+elif [[ $(uname -s) = "Linux" ]];then
         jobs=$(nproc)
 fi
 
@@ -151,15 +154,19 @@ else
 fi
 
 if  [ $sync == "y" ];then
-         repo init -u https://github.com/BlissRoms/platform_manifest.git -b $romBranch
-if [ -d $rompath/.repo/local_manifests ] ;then
-     cp -r $rompath/build/make/core/treble/treble_manifests/* $rompath/.repo/local_manifests
- else
-     mkdir -p $rompath/.repo/local_manifests
-     cp -r $rompath/build/make/core/treble/treble_manifests/* $rompath/.repo/local_manifests
-fi
-rm -f .repo/local_manifests/replace.xml
-repo sync -c -j$jobs --force-sync
+         repo init -u https://github.com/BlissRoms/platform_manifest.git -b $romBranch 
+         rm -f .repo/local_manifests/*
+	if [ -d $rompath/.repo/local_manifests ] ;then
+		 cp -r $rompath/build/make/core/x86/x86_manifests/* $rompath/.repo/local_manifests
+	else
+		 mkdir -p $rompath/.repo/local_manifests
+		 cp -r $rompath/build/make/core/x86/x86_manifests/* $rompath/.repo/local_manifests
+	fi
+	
+	repo sync -c -j$jobs --no-tags --no-clone-bundle --force-sync
+	
+else 
+	echo "Not gonna sync this round"
 fi
 
 rm -f device/*/sepolicy/common/private/genfs_contexts
@@ -195,7 +202,7 @@ bash "$rompath/build/make/core/treble/apply-patches.sh" $rompath/patches
 fi
 
 blissRelease(){
-if [[ "$1" = "y" && "$2" = "a" ]];then
+if [[ "$1" = "y" && $bliss_partition = "a" ]];then
        echo "Building twrp flashable gsi.."
         if [ -d $OUT/img2sdat ] ;then
              cp -r $rompath/build/make/core/treble/img2sdat/* $OUT/img2sdat
@@ -217,22 +224,22 @@ if [[ "$1" = "y" && "$2" = "a" ]];then
         cd $OUT/twrp_flashables/arm64a
         7za a -tzip arm64a.zip *
         cd $rompath
-        cp $OUT/twrp_flashables/arm64a/arm64a.zip $rompath/release/$rom_fp/bliss-$bliss_variant_name.zip
+        cp $OUT/twrp_flashables/arm64a/arm64a.zip $rompath/release/$rom_fp/Bliss-$ver-$bliss_variant_name.zip
         rm -rf $OUT/img2sdat $OUT/twrp_flashables
-        filename=bliss-$bliss_variant_name.zip
+        filename=Bliss-$ver-$bliss_variant_name.zip
         filesize=$(stat -c%s release/$rom_fp/$filename)
-        md5sum release/$rom_fp/bliss-$bliss_variant_name.zip > release/$rom_fp/bliss-$bliss_variant_name.zip.md5
-        md5sum_file=bliss-$bliss_variant_name.zip.md5
+        md5sum release/$rom_fp/Bliss-$ver-$bliss_variant_name.zip > release/$rom_fp/Bliss-$ver-$bliss_variant_name.zip.md5
+        md5sum_file=Bliss-$ver-$bliss_variant_name.zip.md5
 else
-        if  [[ "$1" = "n" || "$2" = "ab" ]];then
+        if  [[ "$1" = "n" || $bliss_partition = "ab" ]];then
         echo "Twrp Building is currently not suported on a/b"
         fi
-        echo "Copying $OUT/system.img -> release/$rom_fp/bliss-$bliss_variant_name.img"
-        cp $OUT/system.img release/$rom_fp/bliss-$bliss_variant_name.img
-        filename=bliss-$bliss_variant_name.img
+        echo "Copying $OUT/system.img -> release/$rom_fp/Bliss-$ver-$bliss_variant_name.img"
+        cp $OUT/system.img release/$rom_fp/Bliss-$ver-$bliss_variant_name.img
+        filename=Bliss-$ver-$bliss_variant_name.img
         filesize=$(stat -c%s release/$rom_fp/$filename)
-        md5sum release/$rom_fp/bliss-$bliss_variant_name.img  > release/$rom_fp/bliss-$bliss_variant_name.img.md5
-        md5sum_file=bliss-$bliss_variant_name.img.md5
+        md5sum release/$rom_fp/Bliss-$ver-$bliss_variant_name.img  > release/$rom_fp/Bliss-$ver-$bliss_variant_name.img.md5
+        md5sum_file=Bliss-$ver-$bliss_variant_name.img.md5
 fi
 }
 
@@ -262,12 +269,15 @@ blissHeader(){
 }
 
 if [[ "$1" = "arm64_a_stock" || "$1" = "arm64_a_gapps" || "$1" = "arm64_a_foss" || "$1" = "arm64_a_go" || "$1" = "arm64_ab_stock" || "$1" = "arm64_ab_gapps" || "$1" = "arm64_ab_foss" || "$1" = "arm64_ab_go" ]];then
-echo "$1"
+echo "Setting up build env for $1"
 . build/envsetup.sh
 fi
 
 buildVariant() {
-        lunch $1
+		## echo "running lunch for $1"
+        ## lunch $1
+        echo "Running lunch for $bliss_variant"
+        lunch $bliss_variant
         make WITHOUT_CHECK_API=true BUILD_NUMBER=$rom_fp installclean
         make WITHOUT_CHECK_API=true BUILD_NUMBER=$rom_fp -j$jobs systemimage
         make WITHOUT_CHECK_API=true BUILD_NUMBER=$rom_fp vndk-test-sepolicy
