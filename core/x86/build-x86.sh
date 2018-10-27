@@ -16,6 +16,7 @@ file_size=""
 clean="n"
 sync="n"
 patch="n"
+proprietary="n"
 romBranch=""
 
 if [ -z "$USER" ];then
@@ -38,7 +39,8 @@ do
     -h | --help)
       echo "Usage: $0 options buildVariants blissBranch/extras"
       echo "options: -s | --sync: Repo syncs the rom (clears out patches), then reapplies patches to needed repos"
-      echo ""
+      echo "		 -p | --patch: Run the patches only"
+      echo "		 -r | --proprietary: build needed items from proprietary vendor (non-public)"
       echo "buildVariants: "
       echo "android_x86-user, android_x86-userdebug, android_x86-eng,  "
       echo "android_x86_64-user, android_x86_64-userdebug, android_x86_64-eng"
@@ -60,6 +62,10 @@ do
     -p | --patch)
       patch="y";
       echo "patching selected."
+      ;;
+    -r | --proprietary)
+      proprietary="y";
+      echo "proprietary selected."
       ;;
   # ...
 
@@ -189,12 +195,25 @@ echo "Setting up build env for: $1"
 	. build/envsetup.sh
 fi
 
+buildProprietary() {
+	echo "Setting up Proprietary environment for: $1"
+	lunch $1
+	echo "Building proprietary tools, part 1... This won't take too long..."
+	mka update_engine_applier
+	echo "Building proprietary tools... part 2... This may take a while..."
+	mka proprietary
+}
+
 buildVariant() {
 	echo "Starting lunch command for: $1"
 	lunch $1
 	echo "Starting up the build... This may take a while..."
 	mka iso_img
 }
+
+if  [ $proprietary == "y" ];then
+	buildProprietary $bliss_variant
+fi
 
 if [[ "$1" = "android_x86_64-user" || "$1" = "android_x86_64-userdebug" || "$1" = "android_x86_64-eng" || "$1" = "android_x86-user" || "$1" = "android_x86-userdebug" || "$1" = "android_x86-eng" ]];then
 	buildVariant $bliss_variant $bliss_variant_name
