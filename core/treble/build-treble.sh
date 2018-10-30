@@ -154,17 +154,17 @@ else
 fi
 
 if  [ $sync == "y" ];then
-         repo init -u https://github.com/BlissRoms/platform_manifest.git -b $romBranch 
-         rm -f .repo/local_manifests/*
-	if [ -d $rompath/.repo/local_manifests ] ;then
-		 cp -r $rompath/build/make/core/x86/x86_manifests/* $rompath/.repo/local_manifests
-	else
-		 mkdir -p $rompath/.repo/local_manifests
-		 cp -r $rompath/build/make/core/x86/x86_manifests/* $rompath/.repo/local_manifests
-	fi
-	
-	repo sync -c -j$jobs --no-tags --no-clone-bundle --force-sync
-	
+        repo init -u https://github.com/BlissRoms/platform_manifest.git -b $romBranch
+        rm -f .repo/local_manifests/replace.xml
+if [ -d $rompath/.repo/local_manifests ] ;then
+        cp -r $rompath/build/make/core/treble/treble_manifests/* $rompath/.repo/local_manifests
+ else
+        mkdir -p $rompath/.repo/local_manifests
+        cp -r $rompath/build/make/core/treble/treble_manifests/* $rompath/.repo/local_manifests
+fi
+
+repo sync -c -j$jobs --no-tags --no-clone-bundle --force-sync
+
 else 
 	echo "Not gonna sync this round"
 fi
