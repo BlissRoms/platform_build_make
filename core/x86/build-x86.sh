@@ -197,7 +197,7 @@ fi
 
 buildProprietary() {
 	echo "Setting up Proprietary environment for: $1"
-	lunch $1
+	lunch $bliss_variant
 	echo "Building proprietary tools, part 1... This won't take too long..."
 	mka update_engine_applier
 	echo "Building proprietary tools... part 2... This may take a while..."
@@ -212,6 +212,7 @@ buildVariant() {
 }
 
 if  [ $proprietary == "y" ];then
+	. build/envsetup.sh
 	buildProprietary $bliss_variant
 fi
 

@@ -123,4 +123,7 @@
   <!-- END X86 INSTALLER -->
   <project path="external/drm_framebuffer" name="lambdadroid/drm_framebuffer" revision="master" remote="github" />
   
+  <!-- PROPRIETARY METHODS -->
+  <project path="vendor/bliss_priv" name="vendor_bliss_priv" remote="BR-x86" revision="p9.0" />
+  
 </manifest>
