@@ -140,11 +140,19 @@ elif [ "$2" = "foss" ];then
    
 elif [ "$2" = "gapps" ];then
    export USE_FOSS=false
+   export USE_GO=false
    export USE_OPENGAPPS=true
    echo "Building with OpenGapps included"
    
+elif [ "$2" = "go" ];then
+   export USE_GO=true
+   export USE_FOSS=false
+   export USE_OPENGAPPS=false
+   echo "Building with Go-gapps included"
+   
 elif [ "$2" = "none" ];then
    export USE_FOSS=false
+   export USE_GO=false
    export USE_OPENGAPPS=false
    echo "Building with no app stores"
    
