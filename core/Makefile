@@ -1382,6 +1382,13 @@ $(RECOVERY_INSTALL_OTA_KEYS): $(OTA_PUBLIC_KEYS) $(DUMPKEY_JAR) $(extra_keys)
 RECOVERYIMAGE_ID_FILE := $(PRODUCT_OUT)/recovery.id
 
 define build-recoveryramdisk
+  @echo ----- Generating Changelog ------
+  # Generate Bliss Changelog
+  $(hide) ./vendor/bliss/tools/changelog
+  $(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/Changelog-$(BLISS_VERSION).txt
+  $(hide) cp $(PRODUCT_OUT)/Changelog-$(BLISS_VERSION).txt $(PRODUCT_OUT)/system/etc/Changelog.txt
+
+  @echo ----- Making recovery image ------
   $(hide) mkdir -p $(TARGET_RECOVERY_OUT)
   $(hide) mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/etc $(TARGET_RECOVERY_ROOT_OUT)/sdcard $(TARGET_RECOVERY_ROOT_OUT)/tmp
   # Copying baseline ramdisk...
@@ -1622,6 +1629,11 @@ endif
 
 # $(1): output file
 define build-systemimage-target
+  @echo ----- Generating changelog ------
+  # Generate Bliss Changelog
+  $(hide) ./vendor/bliss/tools/changelog
+  $(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/Changelog-$(BLISS_VERSION).txt
+  $(hide) cp $(PRODUCT_OUT)/Changelog-$(BLISS_VERSION).txt $(PRODUCT_OUT)/system/etc/Changelog.txt
   @echo "Target system fs image: $(1)"
   $(call create-system-vendor-symlink)
   $(call create-system-product-symlink)
