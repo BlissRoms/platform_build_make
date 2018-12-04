@@ -234,12 +234,12 @@ else
         if  [[ "$1" = "n" || $bliss_partition = "ab" ]];then
         echo "Twrp Building is currently not suported on a/b"
         fi
-        echo "Copying $OUT/system.img -> release/$rom_fp/Bliss-$ver-$bliss_variant_name.img"
-        cp $OUT/system.img release/$rom_fp/Bliss-$ver-$bliss_variant_name.img
-        filename=Bliss-$ver-$bliss_variant_name.img
+        echo "Compressing and Copying $OUT/system.img -> release/$rom_fp/Bliss-$ver-$bliss_variant_name.img.xz"
+        xz -c $OUT/system.img > release/$rom_fp/Bliss-$ver-$bliss_variant_name.img.xz
+        filename=Bliss-$ver-$bliss_variant_name.img.xz
         filesize=$(stat -c%s release/$rom_fp/$filename)
-        md5sum release/$rom_fp/Bliss-$ver-$bliss_variant_name.img  > release/$rom_fp/Bliss-$ver-$bliss_variant_name.img.md5
-        md5sum_file=Bliss-$ver-$bliss_variant_name.img.md5
+        md5sum release/$rom_fp/Bliss-$ver-$bliss_variant_name.img.xz  > release/$rom_fp/Bliss-$ver-$bliss_variant_name.img.xz.md5
+        md5sum_file=Bliss-$ver-$bliss_variant_name.img.xz.md5
 fi
 }
 
