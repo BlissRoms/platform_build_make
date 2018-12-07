@@ -136,6 +136,7 @@ if [ "$2" = "" ];then
 elif [ "$2" = "foss" ];then
    export USE_OPENGAPPS=false
    export USE_FOSS=true
+   export USE_GO=false
    echo "Building with FDroid & microG included"
    
 elif [ "$2" = "gapps" ];then
