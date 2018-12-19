@@ -36,6 +36,8 @@
   <remove-project name="platform/external/libusb-compat" />
   <remove-project name="platform/external/mesa3d" />
   <remove-project name="platform/external/swiftshader" />
+  <remove-project name="platform/vendor/qcom" />
+  
   <!--
   <remove-project name="platform/packages/services/Telecomm" />
   -->
