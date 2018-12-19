@@ -193,8 +193,8 @@ if  [ $patch == "y" ];then
 	bash "$rompath/vendor/x86/utils/autopatch.sh"
 fi
 
-echo "Removing: device/*/sepolicy/common/private/genfs_contexts"
-rm -f device/*/sepolicy/common/private/genfs_contexts
+# echo "Removing: device/*/sepolicy/common/private/genfs_contexts"
+# rm -f device/*/sepolicy/common/private/genfs_contexts
 echo "Removing: vendor/bliss/build/tasks/kernel.mk"
 rm -f vendor/bliss/build/tasks/kernel.mk
 
