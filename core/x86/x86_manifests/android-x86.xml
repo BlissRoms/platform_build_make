@@ -63,7 +63,7 @@
   <project path="external/llvm70" name="platform/external/llvm" remote="x86" revision="oreo-x86" />
   -->
   
-  <project path="external/mesa" name="platform_mesa" remote="BR-x86" revision="m18.3.0-devel_w40_LLVM70" />
+  <project path="external/mesa" name="platform_mesa" remote="BR-x86" revision="18.3.1_pie-x86" />
   <project path="external/llvm70" name="llvm" remote="maurossi" revision="oreo-x86_llvm70_release_70" groups="pdk" />
   
   <!-- From Android-x86 repositories -->
@@ -91,10 +91,10 @@
 <!--
   <project path="external/mesa" name="platform/external/mesa" remote="x86" revision="nougat-x86" />
 -->
-  <project path="external/drm_gralloc" name="platform_external_drm_gralloc" remote="BR-x86" revision="p9.0" />
+  <project path="external/drm_gralloc" name="platform_external_drm_gralloc" remote="BR-x86" revision="mesa-18.3_pie-x86" />
   <project path="external/gbm_gralloc" name="platform/external/gbm_gralloc" remote="x86" revision="oreo-x86" />
   <project path="external/ffmpeg" name="platform/external/ffmpeg" remote="x86" revision="oreo-x86" />
-  <project path="external/libdrm" name="platform_external_libdrm" remote="BR-x86" revision="oreo-x86" />
+  <project path="external/libdrm" name="platform_external_libdrm" remote="BR-x86" revision="pie-x86" />
   <project path="external/swiftshader" name="platform_external_swiftshader" remote="BR-x86" revision="p9.0" />
   <project path="external/ntfs-3g" name="platform_external_ntfs-3g" remote="BR-x86" revision="p9.0" />
   <project path="external/s2tc" name="platform_external_s2tc" remote="BR-x86" revision="p9.0" />
