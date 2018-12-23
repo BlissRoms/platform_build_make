@@ -37,6 +37,7 @@
   <remove-project name="platform/external/mesa3d" />
   <remove-project name="platform/external/swiftshader" />
   <remove-project name="platform_vendor_qcom_opensource_cryptfs_hw" />
+  <remove-project name="platform/prebuilts/build-tools" />
   
   <!--
   <remove-project name="platform/packages/services/Telecomm" />
@@ -113,13 +114,15 @@
   <!--
   <project path="packages/apps/Taskbar" name="platform/packages/apps/Taskbar" remote="x86" revision="oreo-x86" />
   -->
+  <project path="prebuilts/build-tools" name="platform_prebuilts_build-tools" groups="pdk" remote="BR-x86" revision="p9.0-x86" />
+  
   <project path="prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.11-4.6" name="platform/prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.11-4.6" remote="aosp" revision="master" clone-depth="1" />
   <project path="prebuilts/gcc/darwin-x86/arm/arm-eabi-4.8" name="platform/prebuilts/gcc/darwin-x86/arm/arm-eabi-4.8" remote="aosp" groups="pdk,darwin,arm" revision="master" clone-depth="1" />
   <project path="prebuilts/gcc/linux-x86/arm/arm-eabi-4.8" name="platform/prebuilts/gcc/linux-x86/arm/arm-eabi-4.8" remote="aosp" groups="pdk,linux,arm" revision="master" clone-depth="1" />
   <project path="prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.11-4.8" name="platform/prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.11-4.8" remote="aosp" groups="pdk,linux" revision="master"  clone-depth="1" />
-
+  <!--
   <project path="external/bison" name="platform/external/bison" remote="aosp" groups="pdk" revision="master" />
-  
+  -->
   
   <project path="device/sample" name="device/sample" remote="aosp" groups="pdk" /> 
   <project groups="aosp,pdk" name="platform/hardware/bsp/intel" path="hardware/bsp/intel" remote="aosp" revision="refs/tags/android-7.1.1_r6" />
