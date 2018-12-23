@@ -52,7 +52,7 @@
   <project path="kernel" name="kernel_common" remote="BR-x86" revision="k4.16.14-bliss-ipts-ga" />
 -->
   <project path="kernel" name="kernel_common" remote="BR-x86" revision="kernel-4.9" />
-  <project path="external/kernel-drivers" name="platform/external/kernel-drivers" remote="x86" revision="oreo-x86" />
+  
   <project path="device/generic/firmware" name="platform_device_generic_firmware" remote="BR-x86" revision="dev-kernel.org" />
   
   <!--
