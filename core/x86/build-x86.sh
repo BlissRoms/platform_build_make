@@ -208,16 +208,16 @@ buildProprietary() {
 	echo "Setting up Proprietary environment for: $1"
 	lunch $bliss_variant
 	echo "Building proprietary tools, part 1... This won't take too long..."
-	make -j4 update_engine_applier
+	mka update_engine_applier
 	echo "Building proprietary tools... part 2... This may take a while..."
-	make -j4 proprietary
+	mka proprietary
 }
 
 buildVariant() {
 	echo "Starting lunch command for: $1"
 	lunch $1
 	echo "Starting up the build... This may take a while..."
-	make -j4 iso_img
+	mka iso_img
 }
 
 if  [ $proprietary == "y" ];then
