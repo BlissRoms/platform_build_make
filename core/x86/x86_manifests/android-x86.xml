@@ -10,6 +10,8 @@
   <remote name="intel" fetch="https://github.com/intel" />
   <remote name="trusty-ia" fetch="https://github.com/trusty-ia" />
   <remote name="aquynh" fetch="https://github.com/aquynh" />
+  <remote name="chromiumos" fetch="https://chromium.googlesource.com/chromiumos" />
+  <remote name="me176c" fetch="https://github.com/me176c-dev/" />
   
   <!-- Modified or unnecessary AOSP projects -->
   
@@ -52,7 +54,9 @@
   <project path="kernel" name="kernel_common" remote="BR-x86" revision="k4.16.14-bliss-ipts-ga" />
 -->
   <project path="kernel" name="kernel_common" remote="BR-x86" revision="kernel-4.9" />
-  
+  <!-- 
+  <project path="external/kernel-drivers" name="platform/external/kernel-drivers" remote="x86" revision="oreo-x86" />
+  -->
   <project path="device/generic/firmware" name="platform_device_generic_firmware" remote="BR-x86" revision="dev-kernel.org" />
   
   <!--
@@ -79,7 +83,7 @@
   <project path="external/alsa-utils" name="platform_external_alsa-utils" remote="BR-x86" revision="p9.0" />
   <project path="external/bluetooth/bluez" name="platform_external_bluetooth_bluez" remote="BR-x86" revision="p9.0" />
   <project path="external/busybox" name="platform_external_busybox" remote="BR-x86" revision="p9.0" />
-  <project path="external/efibootmgr" name="platform/external/efibootmgr" remote="x86" revision="oreo-x86" />
+  <project path="external/efibootmgr" name="platform_external_efibootmgr" remote="BR-x86" revision="p9.0-x86" />
   <project path="external/efivar" name="platform_external_efivar" remote="BR-x86" revision="p9.0" />
   <project path="external/eject" name="platform_external_eject" remote="BR-x86" revision="p9.0" />
   <!--
@@ -93,6 +97,10 @@
 -->
   <project path="external/drm_gralloc" name="platform_external_drm_gralloc" remote="BR-x86" revision="mesa-18.3_pie-x86" />
   <project path="external/gbm_gralloc" name="platform/external/gbm_gralloc" remote="x86" revision="oreo-x86" />
+  <project path="external/drm_framebuffer" name="drm_framebuffer" revision="p9.0-x86" remote="BR-x86" />
+  <project path="external/minigbm" name="platform/minigbm" remote="chromiumos" revision="master" /> 
+  <!-- <project name="android_external_minigbm" path="external/minigbm" remote="me176c" groups="lineage-16.0" />-->
+  <project path="external/drmfb-composer" name="drmfb-composer" remote="me176c" revision="master" />
   <project path="external/ffmpeg" name="platform/external/ffmpeg" remote="x86" revision="oreo-x86" />
   <project path="external/libdrm" name="platform_external_libdrm" remote="BR-x86" revision="pie-x86" />
   <project path="external/swiftshader" name="platform_external_swiftshader" remote="BR-x86" revision="p9.0" />
@@ -127,7 +135,6 @@
   <!-- START X86 INSTALLER -->
   <project path="x86_installer" name="BlissRoms-x86/Androidx86-Installer-for-Windows" revision="master" remote="github" /> 
   <!-- END X86 INSTALLER -->
-  <project path="external/drm_framebuffer" name="lambdadroid/drm_framebuffer" revision="master" remote="github" />
   
   <!-- PROPRIETARY METHODS -->
   <project path="vendor/bliss_priv" name="vendor_bliss_priv" remote="BR-x86" revision="p9.0" />
