@@ -139,7 +139,6 @@ function check_product()
     fi
     if (echo -n $1 | grep -q -e "^bliss_") ; then
         BLISS_BUILD=$(echo -n $1 | sed -e 's/^bliss_//g')
-        export BUILD_NUMBER=$( (date +%s%N ; echo $BLISS_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10 )
     else
         BLISS_BUILD=
     fi
