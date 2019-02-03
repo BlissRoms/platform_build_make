@@ -67,8 +67,8 @@
   <project path="external/llvm70" name="platform/external/llvm" remote="x86" revision="oreo-x86" />
   -->
   
-  <project path="external/mesa" name="platform_mesa" remote="BR-x86" revision="18.3.1_pie-x86" />
-  <project path="external/llvm70" name="llvm" remote="maurossi" revision="oreo-x86_llvm70_release_70" groups="pdk" />
+  <project path="external/mesa" name="platform_mesa" remote="BR-x86" revision="18.3.2_pie-x86" />
+  <project path="external/llvm70" name="platform_external_llvm70" remote="BR-x86" revision="pie-x86_llvm70-r341512" groups="pdk" />
   
   <!-- From Android-x86 repositories -->
 
