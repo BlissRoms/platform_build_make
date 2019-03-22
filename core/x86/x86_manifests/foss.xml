@@ -8,9 +8,11 @@
 	<!--<project path="vendor/foss" name="vendor_foss"
 		remote="phh" revision="master" /> -->
 		
+	<project name="vendor_fdroid" path="vendor/fdroid" remote="BR-x86" revision="pie" />
+		
 	<!--
 	<project name="lineageos4microg/android_prebuilts_prebuiltapks" path="vendor/fdroid" remote="github" revision="master" />
-	-->
+	
 	<project name="android_vendor_microg" path="vendor/microg" remote="BR-x86" revision="p9.0" />
-
+	-->
 </manifest>
