@@ -843,6 +843,18 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   system_progress = 0.75
 
+  script.Print("      ___           ___                   ___           ___      ");
+  script.Print("     /\  \         /\__\      ___        /\  \         /\  \     ");
+  script.Print("    /::\  \       /:/  /     /\  \      /::\  \       /::\  \    ");
+  script.Print("   /:/\:\  \     /:/  /      \:\  \    /:/\ \  \     /:/\ \  \   ");
+  script.Print("  /::\~\:\__\   /:/  /       /::\__\  _\:\~\ \  \   _\:\~\ \  \  ");
+  script.Print(" /:/\:\ \:\__\ /:/__/     __/:/\/__/ /\ \:\ \ \__\ /\ \:\ \ \__\ ");
+  script.Print(" \:\~\:\/:/  / \:\  \    /\/:/  /    \:\ \:\ \/__/ \:\ \:\ \/__/ ");
+  script.Print("  \:\ \::/  /   \:\  \   \::/__/      \:\ \:\__\    \:\ \:\__\   ");
+  script.Print("   \:\/:/  /     \:\  \   \:\__\       \:\/:/  /     \:\/:/  /   ");
+  script.Print("    \::/__/       \:\__\   \/__/        \::/  /       \::/  /    ");
+  script.Print("     ~~            \/__/                 \/__/         \/__/     ");
+
   if OPTIONS.wipe_user_data:
     system_progress -= 0.1
   if HasVendorPartition(input_zip):
