@@ -843,17 +843,37 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   system_progress = 0.75
 
-  script.Print("      ___           ___                   ___           ___      ");
-  script.Print("     /\  \         /\__\      ___        /\  \         /\  \     ");
-  script.Print("    /::\  \       /:/  /     /\  \      /::\  \       /::\  \    ");
-  script.Print("   /:/\:\  \     /:/  /      \:\  \    /:/\ \  \     /:/\ \  \   ");
-  script.Print("  /::\~\:\__\   /:/  /       /::\__\  _\:\~\ \  \   _\:\~\ \  \  ");
-  script.Print(" /:/\:\ \:\__\ /:/__/     __/:/\/__/ /\ \:\ \ \__\ /\ \:\ \ \__\ ");
-  script.Print(" \:\~\:\/:/  / \:\  \    /\/:/  /    \:\ \:\ \/__/ \:\ \:\ \/__/ ");
-  script.Print("  \:\ \::/  /   \:\  \   \::/__/      \:\ \:\__\    \:\ \:\__\   ");
-  script.Print("   \:\/:/  /     \:\  \   \:\__\       \:\/:/  /     \:\/:/  /   ");
-  script.Print("    \::/__/       \:\__\   \/__/        \::/  /       \::/  /    ");
-  script.Print("     ~~            \/__/                 \/__/         \/__/     ");
+  manufacturer = target_info.GetBuildProp("ro.product.manufacturer")
+  bliss_version = target_info.GetBuildProp("ro.bliss.version")
+  bliss_build = target_info.GetBuildProp("ro.bliss.build.status")
+  build = target_info.GetBuildProp("ro.build.date")
+  android_version = target_info.GetBuildProp("ro.build.version.release")
+  build_id = target_info.GetBuildProp("ro.build.id")
+  security_patch = target_info.GetBuildProp("ro.build.version.security_patch")
+  device = target_info.GetBuildProp("ro.product.device")
+
+
+  script.Print("*********************************************"); 
+  script.Print("__________.____    .___  _________ _________ "); 
+  script.Print("\______   \    |   |   |/   _____//   _____/ "); 
+  script.Print(" |    |  _/    |   |   |\_____  \ \_____  \  "); 
+  script.Print(" |    |   \    |___|   |/        \/        \ "); 
+  script.Print(" |______  /_______ \___/_______  /_______  / "); 
+  script.Print("        \/        \/           \/        \/  "); 
+  script.Print("*********************************************"); 
+  script.Print("*********** Welcome to Bliss-OS *************"); 
+  script.Print("************** Android 9.0 Pie **************"); 
+  script.Print("*********************************************"); 
+  script.Print(" Android Version  : %s"%(android_version));
+  script.Print(" Bliss Version    : %s"%(bliss_version));
+  script.Print(" Bliss build type : %s"%(bliss_build));
+  script.Print(" Build ID         : %s"%(build_id));
+  script.Print(" Build Date       : %s"%(build));
+  script.Print(" Security Patch   : %s"%(security_patch));
+  script.Print(" Device           : %s"%(device));
+  script.Print(" Manufacturer     : %s"%(manufacturer));
+  script.Print("*********************************************");
+  script.Print("*********************************************"); 
 
   if OPTIONS.wipe_user_data:
     system_progress -= 0.1
