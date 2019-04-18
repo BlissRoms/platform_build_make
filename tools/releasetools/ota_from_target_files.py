@@ -853,17 +853,17 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   device = target_info.GetBuildProp("ro.product.device")
 
 
-  script.Print("*********************************************"); 
-  script.Print("__________.____    .___  _________ _________ "); 
-  script.Print("\______   \    |   |   |/   _____//   _____/ "); 
-  script.Print(" |    |  _/    |   |   |\_____  \ \_____  \  "); 
-  script.Print(" |    |   \    |___|   |/        \/        \ "); 
-  script.Print(" |______  /_______ \___/_______  /_______  / "); 
-  script.Print("        \/        \/           \/        \/  "); 
-  script.Print("*********************************************"); 
-  script.Print("*********** Welcome to Bliss-OS *************"); 
-  script.Print("************** Android 9.0 Pie **************"); 
-  script.Print("*********************************************"); 
+  script.Print("*********************************************");
+  script.Print("__________.____    .___  _________ _________ ");
+  script.Print("\______   \    |   |   |/   _____//   _____/ ");
+  script.Print(" |    |  _/    |   |   |\_____  \ \_____  \  ");
+  script.Print(" |    |   \    |___|   |/        \/        \ ");
+  script.Print(" |______  /_______ \___/_______  /_______  / ");
+  script.Print("        \/        \/           \/        \/  ");
+  script.Print("*********************************************");
+  script.Print("*********** Welcome to Bliss-OS *************");
+  script.Print("************** Android 9.0 Pie **************");
+  script.Print("*********************************************");
   script.Print(" Android Version  : %s"%(android_version));
   script.Print(" Bliss Version    : %s"%(bliss_version));
   script.Print(" Bliss build type : %s"%(bliss_build));
@@ -873,7 +873,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print(" Device           : %s"%(device));
   script.Print(" Manufacturer     : %s"%(manufacturer));
   script.Print("*********************************************");
-  script.Print("*********************************************"); 
+  script.Print("*********************************************");
 
   if OPTIONS.wipe_user_data:
     system_progress -= 0.1
