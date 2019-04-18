@@ -73,7 +73,7 @@
   <remove-project name="platform/packages/services/Telecomm" />
   -->
   
-  <project path="vendor/x86" name="vendor_x86" remote="BR-x86" revision="p9.0" />
+  <project path="vendor/x86" name="vendor_x86" remote="BR-x86" revision="p9.0-11.8" />
   
 <!--
   <project path="kernel" name="linux" remote="maurossi" revision="kernel-4.15" />
@@ -86,6 +86,7 @@
   <!-- 
   <project path="external/kernel-drivers" name="platform/external/kernel-drivers" remote="x86" revision="oreo-x86" />
   -->
+  <project path="external/kernel-drivers" name="external_kernel-drivers" remote="BR-x86" revision="p9.0-x86" />
   <project path="device/generic/firmware" name="platform_device_generic_firmware" remote="BR-x86" revision="dev-kernel.org" />
   
   <!--
@@ -98,18 +99,21 @@
   
   <project path="external/mesa" name="platform_mesa" remote="BR-x86" revision="18.3.5-pie-x86-llvm80" />
   <project path="external/llvm70" name="platform_external_llvm70" remote="BR-x86" revision="pie-x86_llvm70-r341512" groups="pdk" />
+  <!--
   <project path="external/llvm80" name="llvm" remote="maurossi" revision="pie-x86_llvm80_soong" groups="pdk" />
-  
+  -->
+  <project path="external/llvm80" name="platform/external/llvm" remote="x86" revision="pie-x86" />
+    
   <!-- From Android-x86 repositories -->
 
   <project path="bootable/newinstaller" name="bootable_newinstaller" remote="BR-x86" revision="p9.0" />
-  <project path="device/generic/common" name="device_generic_common" remote="BR-x86" revision="p9.0" />
+  <project path="device/generic/common" name="device_generic_common" remote="BR-x86" revision="p9.0-11.8" />
   <!--
   <project path="device/generic/firmware" name="device/generic/firmware" remote="x86" revision="oreo-x86" />
   -->
   <project path="device/generic/x86" name="device/generic/x86" remote="x86" revision="oreo-x86" />
   <project path="device/generic/x86_64" name="device/generic/x86_64" remote="x86" revision="oreo-x86" />
-  <project path="external/alsa-lib" name="platform_external_alsa-lib" remote="BR-x86" revision="p9.0" />
+  <project path="external/alsa-lib" name="platform_external_alsa-lib" remote="BR-x86" revision="pie-x86" />
   <project path="external/alsa-utils" name="platform_external_alsa-utils" remote="BR-x86" revision="p9.0" />
   <project path="external/bluetooth/bluez" name="platform_external_bluetooth_bluez" remote="BR-x86" revision="p9.0" />
   <project path="external/busybox" name="platform_external_busybox" remote="BR-x86" revision="p9.0-r2" />
@@ -119,12 +123,17 @@
   <!--
   <project path="external/exfat" name="platform_external_exfat" remote="BR-x86" revision="p9.0" />
   <project path="external/exfat" name="platform/external/exfat" remote="x86" revision="oreo-x86" />
+  <project path="external/mesa" name="platform/external/mesa" remote="x86" revision="nougat-x86" />
   -->
   <project path="external/koush/Superuser" name="platform_external_koush_Superuser" remote="BR-x86" revision="p9.0" />
   <project path="external/koush/Widgets" name="platform/external/koush/Widgets" remote="x86" revision="oreo-x86" />
-<!--
-  <project path="external/mesa" name="platform/external/mesa" remote="x86" revision="nougat-x86" />
--->
+  
+  <!-- BEGIN SUPERSU -->
+
+  <!-- <project path="vendor/supersu" name="vendor-supersu" remote="BR-x86" revision="v2.82-SR5" /> -->
+
+  <!-- END SUPERSU -->
+
   <project path="external/drm_gralloc" name="platform_external_drm_gralloc" remote="BR-x86" revision="pie-x86" />
   <project path="external/gbm_gralloc" name="platform/external/gbm_gralloc" remote="x86" revision="oreo-x86" />
   <project path="external/drm_framebuffer" name="drm_framebuffer" revision="p9.0-x86" remote="BR-x86" />

@@ -44,8 +44,8 @@ do
       echo "buildVariants: "
       echo "android_x86-user, android_x86-userdebug, android_x86-eng,  "
       echo "android_x86_64-user, android_x86_64-userdebug, android_x86_64-eng"
-      echo "blissBranch: select which bliss branch to sync, default is o8.1-los"
-      echo "extras: specify 'foss' or 'gapps' to be built in"
+      echo "blissBranch: select which bliss branch to sync, default is p9.0"
+      echo "extras: specify 'foss', 'go', 'gms', 'gapps' or 'none' to be built in"
       ;;
     -c | --clean)
       clean="y";
@@ -137,25 +137,117 @@ elif [ "$2" = "foss" ];then
    export USE_OPENGAPPS=false
    export USE_FOSS=true
    export USE_GO=false
-   echo "Building with FDroid & microG included"
+   export USE_GMS=false
+   echo -e ${CL_CYN}""${CL_CYN}
+   echo -e ${CL_CYN}"      ___           ___                   ___           ___      "${CL_CYN}
+   echo -e ${CL_CYN}"     /\  \         /\__\      ___        /\  \         /\  \     "${CL_CYN}
+   echo -e ${CL_CYN}"    /::\  \       /:/  /     /\  \      /::\  \       /::\  \    "${CL_CYN}
+   echo -e ${CL_CYN}"   /:/\:\  \     /:/  /      \:\  \    /:/\ \  \     /:/\ \  \   "${CL_CYN}
+   echo -e ${CL_CYN}"  /::\~\:\__\   /:/  /       /::\__\  _\:\~\ \  \   _\:\~\ \  \  "${CL_CYN}
+   echo -e ${CL_CYN}" /:/\:\ \:\__\ /:/__/     __/:/\/__/ /\ \:\ \ \__\ /\ \:\ \ \__\ "${CL_CYN}
+   echo -e ${CL_CYN}" \:\~\:\/:/  / \:\  \    /\/:/  /    \:\ \:\ \/__/ \:\ \:\ \/__/ "${CL_CYN}
+   echo -e ${CL_CYN}"  \:\ \::/  /   \:\  \   \::/__/      \:\ \:\__\    \:\ \:\__\   "${CL_CYN}
+   echo -e ${CL_CYN}"   \:\/:/  /     \:\  \   \:\__\       \:\/:/  /     \:\/:/  /   "${CL_CYN}
+   echo -e ${CL_CYN}"    \::/__/       \:\__\   \/__/        \::/  /       \::/  /    "${CL_CYN}
+   echo -e ${CL_CYN}"     ~~            \/__/                 \/__/         \/__/     "${CL_CYN}
+   echo -e ${CL_CYN}""${CL_CYN}
+   echo -e ${CL_CYN}"======-Bliss-x86 Building w/ microG & F-Droid-====="${CL_RST}
+   echo -e ${CL_CYN}"         Have A Truly Blissful Experience"          ${CL_RST}
+   echo -e ${CL_CYN}"==================================================="${CL_RST}
+   echo -e ""
    
 elif [ "$2" = "gapps" ];then
    export USE_FOSS=false
    export USE_GO=false
    export USE_OPENGAPPS=true
-   echo "Building with OpenGapps included"
+   export USE_GMS=false
+   echo -e ${CL_CYN}""${CL_CYN}
+   echo -e ${CL_CYN}"      ___           ___                   ___           ___      "${CL_CYN}
+   echo -e ${CL_CYN}"     /\  \         /\__\      ___        /\  \         /\  \     "${CL_CYN}
+   echo -e ${CL_CYN}"    /::\  \       /:/  /     /\  \      /::\  \       /::\  \    "${CL_CYN}
+   echo -e ${CL_CYN}"   /:/\:\  \     /:/  /      \:\  \    /:/\ \  \     /:/\ \  \   "${CL_CYN}
+   echo -e ${CL_CYN}"  /::\~\:\__\   /:/  /       /::\__\  _\:\~\ \  \   _\:\~\ \  \  "${CL_CYN}
+   echo -e ${CL_CYN}" /:/\:\ \:\__\ /:/__/     __/:/\/__/ /\ \:\ \ \__\ /\ \:\ \ \__\ "${CL_CYN}
+   echo -e ${CL_CYN}" \:\~\:\/:/  / \:\  \    /\/:/  /    \:\ \:\ \/__/ \:\ \:\ \/__/ "${CL_CYN}
+   echo -e ${CL_CYN}"  \:\ \::/  /   \:\  \   \::/__/      \:\ \:\__\    \:\ \:\__\   "${CL_CYN}
+   echo -e ${CL_CYN}"   \:\/:/  /     \:\  \   \:\__\       \:\/:/  /     \:\/:/  /   "${CL_CYN}
+   echo -e ${CL_CYN}"    \::/__/       \:\__\   \/__/        \::/  /       \::/  /    "${CL_CYN}
+   echo -e ${CL_CYN}"     ~~            \/__/                 \/__/         \/__/     "${CL_CYN}
+   echo -e ${CL_CYN}""${CL_CYN}
+   echo -e ${CL_CYN}"=========-Bliss-x86 Building w/ OpenGapps-========="${CL_RST}
+   echo -e ${CL_CYN}"         Have A Truly Blissful Experience"          ${CL_RST}
+   echo -e ${CL_CYN}"==================================================="${CL_RST}
+   echo -e ""
    
 elif [ "$2" = "go" ];then
    export USE_GO=true
    export USE_FOSS=false
    export USE_OPENGAPPS=false
-   echo "Building with Go-gapps included"
+   export USE_GMS=false
+   echo -e ${CL_CYN}""${CL_CYN}
+   echo -e ${CL_CYN}"      ___           ___                   ___           ___      "${CL_CYN}
+   echo -e ${CL_CYN}"     /\  \         /\__\      ___        /\  \         /\  \     "${CL_CYN}
+   echo -e ${CL_CYN}"    /::\  \       /:/  /     /\  \      /::\  \       /::\  \    "${CL_CYN}
+   echo -e ${CL_CYN}"   /:/\:\  \     /:/  /      \:\  \    /:/\ \  \     /:/\ \  \   "${CL_CYN}
+   echo -e ${CL_CYN}"  /::\~\:\__\   /:/  /       /::\__\  _\:\~\ \  \   _\:\~\ \  \  "${CL_CYN}
+   echo -e ${CL_CYN}" /:/\:\ \:\__\ /:/__/     __/:/\/__/ /\ \:\ \ \__\ /\ \:\ \ \__\ "${CL_CYN}
+   echo -e ${CL_CYN}" \:\~\:\/:/  / \:\  \    /\/:/  /    \:\ \:\ \/__/ \:\ \:\ \/__/ "${CL_CYN}
+   echo -e ${CL_CYN}"  \:\ \::/  /   \:\  \   \::/__/      \:\ \:\__\    \:\ \:\__\   "${CL_CYN}
+   echo -e ${CL_CYN}"   \:\/:/  /     \:\  \   \:\__\       \:\/:/  /     \:\/:/  /   "${CL_CYN}
+   echo -e ${CL_CYN}"    \::/__/       \:\__\   \/__/        \::/  /       \::/  /    "${CL_CYN}
+   echo -e ${CL_CYN}"     ~~            \/__/                 \/__/         \/__/     "${CL_CYN}
+   echo -e ${CL_CYN}""${CL_CYN}
+   echo -e ${CL_CYN}"=============-Bliss-x86 Building w/ Go-============"${CL_RST}
+   echo -e ${CL_CYN}"         Have A Truly Blissful Experience"          ${CL_RST}
+   echo -e ${CL_CYN}"==================================================="${CL_RST}
+   echo -e ""
+   
    
 elif [ "$2" = "none" ];then
    export USE_FOSS=false
    export USE_GO=false
    export USE_OPENGAPPS=false
-   echo "Building with no app stores"
+   export USE_GMS=false
+   echo -e ${CL_CYN}""${CL_CYN}
+   echo -e ${CL_CYN}"      ___           ___                   ___           ___      "${CL_CYN}
+   echo -e ${CL_CYN}"     /\  \         /\__\      ___        /\  \         /\  \     "${CL_CYN}
+   echo -e ${CL_CYN}"    /::\  \       /:/  /     /\  \      /::\  \       /::\  \    "${CL_CYN}
+   echo -e ${CL_CYN}"   /:/\:\  \     /:/  /      \:\  \    /:/\ \  \     /:/\ \  \   "${CL_CYN}
+   echo -e ${CL_CYN}"  /::\~\:\__\   /:/  /       /::\__\  _\:\~\ \  \   _\:\~\ \  \  "${CL_CYN}
+   echo -e ${CL_CYN}" /:/\:\ \:\__\ /:/__/     __/:/\/__/ /\ \:\ \ \__\ /\ \:\ \ \__\ "${CL_CYN}
+   echo -e ${CL_CYN}" \:\~\:\/:/  / \:\  \    /\/:/  /    \:\ \:\ \/__/ \:\ \:\ \/__/ "${CL_CYN}
+   echo -e ${CL_CYN}"  \:\ \::/  /   \:\  \   \::/__/      \:\ \:\__\    \:\ \:\__\   "${CL_CYN}
+   echo -e ${CL_CYN}"   \:\/:/  /     \:\  \   \:\__\       \:\/:/  /     \:\/:/  /   "${CL_CYN}
+   echo -e ${CL_CYN}"    \::/__/       \:\__\   \/__/        \::/  /       \::/  /    "${CL_CYN}
+   echo -e ${CL_CYN}"     ~~            \/__/                 \/__/         \/__/     "${CL_CYN}
+   echo -e ${CL_CYN}""${CL_CYN}
+   echo -e ${CL_CYN}"=============-Bliss-x86 Building Clean-============"${CL_RST}
+   echo -e ${CL_CYN}"         Have A Truly Blissful Experience"          ${CL_RST}
+   echo -e ${CL_CYN}"==================================================="${CL_RST}
+   echo -e ""
+   
+elif [ "$2" = "gms" ];then
+   export USE_GMS=true
+   export USE_FOSS=false
+   export USE_GO=false
+   export USE_OPENGAPPS=false
+   echo -e ${CL_CYN}""${CL_CYN}
+   echo -e ${CL_CYN}"      ___           ___                   ___           ___      "${CL_CYN}
+   echo -e ${CL_CYN}"     /\  \         /\__\      ___        /\  \         /\  \     "${CL_CYN}
+   echo -e ${CL_CYN}"    /::\  \       /:/  /     /\  \      /::\  \       /::\  \    "${CL_CYN}
+   echo -e ${CL_CYN}"   /:/\:\  \     /:/  /      \:\  \    /:/\ \  \     /:/\ \  \   "${CL_CYN}
+   echo -e ${CL_CYN}"  /::\~\:\__\   /:/  /       /::\__\  _\:\~\ \  \   _\:\~\ \  \  "${CL_CYN}
+   echo -e ${CL_CYN}" /:/\:\ \:\__\ /:/__/     __/:/\/__/ /\ \:\ \ \__\ /\ \:\ \ \__\ "${CL_CYN}
+   echo -e ${CL_CYN}" \:\~\:\/:/  / \:\  \    /\/:/  /    \:\ \:\ \/__/ \:\ \:\ \/__/ "${CL_CYN}
+   echo -e ${CL_CYN}"  \:\ \::/  /   \:\  \   \::/__/      \:\ \:\__\    \:\ \:\__\   "${CL_CYN}
+   echo -e ${CL_CYN}"   \:\/:/  /     \:\  \   \:\__\       \:\/:/  /     \:\/:/  /   "${CL_CYN}
+   echo -e ${CL_CYN}"    \::/__/       \:\__\   \/__/        \::/  /       \::/  /    "${CL_CYN}
+   echo -e ${CL_CYN}"     ~~            \/__/                 \/__/         \/__/     "${CL_CYN}
+   echo -e ${CL_CYN}""${CL_CYN}
+   echo -e ${CL_CYN}"===========-Bliss-x86 Building with GMS-==========="${CL_RST}
+   echo -e ${CL_CYN}"         Have A Truly Blissful Experience"          ${CL_RST}
+   echo -e ${CL_CYN}"==================================================="${CL_RST}
+   echo -e ""
    
 else
    romBranch="$2"
