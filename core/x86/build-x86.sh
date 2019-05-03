@@ -288,8 +288,10 @@ fi
 
 # echo "Removing: device/*/sepolicy/common/private/genfs_contexts"
 # rm -f device/*/sepolicy/common/private/genfs_contexts
-echo "Removing: vendor/bliss/build/tasks/kernel.mk"
-rm -f vendor/bliss/build/tasks/kernel.mk
+
+# We no longer need to remove Bliss kernel.mk since we are building with clang now on x86
+# echo "Removing: vendor/bliss/build/tasks/kernel.mk"
+# rm -f vendor/bliss/build/tasks/kernel.mk
 
 if [[ "$1" = "android_x86_64-user" || "$1" = "android_x86_64-userdebug" || "$1" = "android_x86_64-eng" || "$1" = "android_x86-user" || "$1" = "android_x86-userdebug" || "$1" = "android_x86-eng" ]];then
 echo "Setting up build env for: $1"
