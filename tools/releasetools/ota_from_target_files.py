@@ -861,7 +861,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print(" |______  /_______ \___/_______  /_______  / ");
   script.Print("        \/        \/           \/        \/  ");
   script.Print("*********************************************");
-  script.Print("*********** Welcome to Bliss-OS *************");
+  script.Print("*********** Welcome to BlissRoms ************");
   script.Print("************** Android 9.0 Pie **************");
   script.Print("*********************************************");
   script.Print(" Android Version  : %s"%(android_version));
