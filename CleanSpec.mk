@@ -645,6 +645,10 @@ $(call add-clean-step, rm -rf $(PRODUCT_OUT)/system/lib*/libcamera_client.so)
 
 $(call add-clean-step, rm -rf $(TARGET_RECOVERY_ROOT_OUT))
 
+# Clean up old verity tools.
+$(call add-clean-step, rm -rf $(HOST_OUT_JAVA_LIBRARIES)/BootSignature.jar)
+$(call add-clean-step, rm -rf $(HOST_OUT_JAVA_LIBRARIES)/VeritySigner.jar)
+$(call add-clean-step, rm -rf $(HOST_OUT_EXECUTABLES)/build_verity_metadata.py)
 # ************************************************
 # NEWER CLEAN STEPS MUST BE AT THE END OF THE LIST
 # ************************************************
