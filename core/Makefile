@@ -2223,6 +2223,8 @@ $(recovery_uncompressed_ramdisk): $(MKBOOTFS) \
 	    $(recovery_resource_deps) $(recovery_root_deps) \
 	    $(recovery_fstab)
 	# Making recovery image
+        @echo -e ${CL_GRN}"----- Generating Changelog ------"${CL_RST}
+        $(hide) ./vendor/bliss/tools/changelog.sh
 	mkdir -p $(TARGET_RECOVERY_OUT)
 	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/sdcard $(TARGET_RECOVERY_ROOT_OUT)/tmp
 	# Copying baseline ramdisk...
