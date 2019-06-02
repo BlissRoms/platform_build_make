@@ -4147,6 +4147,7 @@ endif
 ifeq ($(build_otatools_package),true)
 
 INTERNAL_OTATOOLS_MODULES := \
+  aapt \
   aapt2 \
   add_img_to_target_files \
   apksigner \
@@ -4491,6 +4492,7 @@ name := $(name)-target_files-$(FILE_NAME_TAG)
 
 intermediates := $(call intermediates-dir-for,PACKAGING,target_files)
 BUILT_TARGET_FILES_PACKAGE := $(intermediates)/$(name).zip
+BUILT_TARGET_FILES_PACKAGE_SIGNED := $(intermediates)/$(name)-signed.zip
 $(BUILT_TARGET_FILES_PACKAGE): intermediates := $(intermediates)
 $(BUILT_TARGET_FILES_PACKAGE): \
 	    zip_root := $(intermediates)/$(name)
@@ -4973,8 +4975,23 @@ endif
 	$(hide) find $(zip_root) -path $(zip_root)/META -prune -o -print | sort >>$@.list
 	$(hide) $(SOONG_ZIP) -L 0 -d -o $@ -C $(zip_root) -l $@.list
 
+$(BUILT_TARGET_FILES_PACKAGE_SIGNED): \
+		 $(BUILT_TARGET_FILES_PACKAGE) \
+		 $(AAPT) \
+		 $(AVBTOOL) \
+		 $(SIGN_TARGET_FILES_APKS)
+	@echo "Package signed target files: $@"
+	$(hide) $(SIGN_TARGET_FILES_APKS) \
+			-p $(HOST_OUT) \
+			-o \
+			-d $(SIGNING_KEYS) $(BUILT_TARGET_FILES_PACKAGE) \
+			$(BUILT_TARGET_FILES_PACKAGE_SIGNED)
+
 .PHONY: target-files-package
 target-files-package: $(BUILT_TARGET_FILES_PACKAGE)
+
+.PHONY: target-files-package-signed
+target-files-package-signed: $(BUILT_TARGET_FILES_PACKAGE_SIGNED)
 
 ifneq ($(filter $(MAKECMDGOALS),target-files-package),)
 $(call dist-for-goals, target-files-package, $(BUILT_TARGET_FILES_PACKAGE))
@@ -4999,12 +5016,12 @@ define build-ota-package-target
 PATH=$(INTERNAL_USERIMAGES_BINARY_PATHS):$$PATH \
     $(OTA_FROM_TARGET_FILES) \
         --verbose \
-        --extracted_input_target_files $(patsubst %.zip,%,$(BUILT_TARGET_FILES_PACKAGE)) \
+         $(if $(SIGNING_KEYS), ,--extracted_input_target_files $(patsubst %.zip,%,$(BUILT_TARGET_FILES_PACKAGE))) \
         --path $(HOST_OUT) \
         --backup=$(backuptool) \
         $(if $(OEM_OTA_CONFIG), --oem_settings $(OEM_OTA_CONFIG)) \
         $(2) \
-        $(BUILT_TARGET_FILES_PACKAGE) $(1)
+	$(if $(SIGNING_KEYS), $(BUILT_TARGET_FILES_PACKAGE_SIGNED), $(BUILT_TARGET_FILES_PACKAGE)) $(1)
 endef
 
 name := $(TARGET_PRODUCT)
@@ -5028,9 +5045,11 @@ endif
 
 $(INTERNAL_OTA_PACKAGE_TARGET): KEY_CERT_PAIR := $(DEFAULT_KEY_CERT_PAIR)
 $(INTERNAL_OTA_PACKAGE_TARGET): .KATI_IMPLICIT_OUTPUTS := $(INTERNAL_OTA_METADATA)
-$(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTA_FROM_TARGET_FILES)
+$(INTERNAL_OTA_PACKAGE_TARGET): \
+		$(if $(SIGNING_KEYS), $(BUILT_TARGET_FILES_PACKAGE_SIGNED), $(BUILT_TARGET_FILES_PACKAGE)) \
+		$(OTA_FROM_TARGET_FILES)
 	@echo "Package OTA: $@"
-	$(call build-ota-package-target,$@,-k $(KEY_CERT_PAIR) --output_metadata_path $(INTERNAL_OTA_METADATA))
+	$(call build-ota-package-target,$@,-k $(if $(SIGNING_KEYS), $(SIGNING_KEYS)/releasekey, $(KEY_CERT_PAIR)) --output_metadata_path $(INTERNAL_OTA_METADATA))
 
 .PHONY: otapackage
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
