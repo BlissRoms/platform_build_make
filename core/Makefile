@@ -2271,6 +2271,8 @@ $(recovery_ramdisk): $(recovery_uncompressed_ramdisk) $(COMPRESSION_COMMAND_DEPS
 # $(1): output file
 # $(2): kernel file
 define build-recoveryimage-target
+  @echo "Generating Changelog"
+  $(hide) ./vendor/bliss/tools/changelog
   $(if $(filter true,$(PRODUCT_SUPPORTS_VBOOT)), \
     $(MKBOOTIMG) --kernel $(2) $(INTERNAL_RECOVERYIMAGE_ARGS) \
                  $(INTERNAL_MKBOOTIMG_VERSION_ARGS) $(BOARD_RECOVERY_MKBOOTIMG_ARGS) \
