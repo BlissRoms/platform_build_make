@@ -2156,7 +2156,11 @@ $(INSTALLED_RECOVERY_RAMDISK_BUILD_PROP_TARGET): $(INSTALLED_RAMDISK_BUILD_PROP_
 	$(copy-file-to-target)
 endif
 
+ifneq ($(TARGET_PREBUILT_RECOVERY_RAMDISK_IMG),)
+INTERNAL_RECOVERYIMAGE_ARGS := --ramdisk $(TARGET_PREBUILT_RECOVERY_RAMDISK_IMG)
+else
 INTERNAL_RECOVERYIMAGE_ARGS := --ramdisk $(recovery_ramdisk)
+endif
 
 ifneq (truetrue,$(strip $(BUILDING_VENDOR_BOOT_IMAGE))$(strip $(BOARD_USES_RECOVERY_AS_BOOT)))
 INTERNAL_RECOVERYIMAGE_ARGS += $(addprefix --second ,$(INSTALLED_2NDBOOTLOADER_TARGET))
@@ -4964,12 +4968,21 @@ $(BUILT_TARGET_FILES_PACKAGE): \
 	$(hide) mkdir -p $(dir $@) $(zip_root)
 ifneq (,$(INSTALLED_RECOVERYIMAGE_TARGET)$(filter true,$(BOARD_USES_RECOVERY_AS_BOOT))$(filter true,$(BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT)))
 	@# Components of the recovery image
+ifneq ($(TARGET_PREBUILT_RECOVERY_RAMDISK),)
+	$(hide) mkdir -p $(zip_root)/$(PRIVATE_RECOVERY_OUT)
+	$(hide) rm -rf $(PRODUCT_OUT)/prebuilt_recovery
+	$(hide) mkdir -p $(PRODUCT_OUT)/prebuilt_recovery
+	$(hide) unzip -o $(TARGET_PREBUILT_RECOVERY_RAMDISK) -d $(PRODUCT_OUT)/prebuilt_recovery/
+	$(hide) $(call package_files-copy-root, \
+	    $(PRODUCT_OUT)/prebuilt_recovery,$(zip_root)/$(PRIVATE_RECOVERY_OUT)/RAMDISK)
+else
 	$(hide) mkdir -p $(zip_root)/$(PRIVATE_RECOVERY_OUT)
 # Exclude recovery files in the default vendor ramdisk if including a standalone
 # recovery ramdisk in vendor_boot.
 ifneq (true,$(BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT))
 	$(hide) $(call package_files-copy-root, \
 	    $(TARGET_RECOVERY_ROOT_OUT),$(zip_root)/$(PRIVATE_RECOVERY_OUT)/RAMDISK)
+endif
 endif
 ifdef INSTALLED_KERNEL_TARGET
 ifneq (,$(filter true,$(BOARD_USES_RECOVERY_AS_BOOT)))
