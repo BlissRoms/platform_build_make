@@ -414,7 +414,7 @@ ifdef LOCAL_CLANG_$($(my_prefix)$(LOCAL_2ND_ARCH_VAR_PREFIX)ARCH)
 my_clang := $(strip $(LOCAL_CLANG_$($(my_prefix)$(LOCAL_2ND_ARCH_VAR_PREFIX)ARCH)))
 endif
 ifeq ($(my_clang),false)
-    $(call pretty-error,LOCAL_CLANG false is no longer supported)
+    $(call warning,LOCAL_CLANG false is no longer supported)
 endif
 
 ifeq ($(LOCAL_C_STD),)
