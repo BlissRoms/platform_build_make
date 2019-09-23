@@ -35,8 +35,6 @@ echo "ro.product.device=$TARGET_DEVICE"
 
 # These values are deprecated, use "ro.product.cpu.abilist"
 # instead (see below).
-echo "# ro.product.cpu.abi and ro.product.cpu.abi2 are obsolete,"
-echo "# use ro.product.cpu.abilist instead."
 echo "ro.product.cpu.abi=$TARGET_CPU_ABI"
 if [ -n "$TARGET_CPU_ABI2" ] ; then
   echo "ro.product.cpu.abi2=$TARGET_CPU_ABI2"
