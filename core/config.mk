@@ -1177,9 +1177,11 @@ include $(BUILD_SYSTEM)/soong_config.mk
 endif
 
 ifneq ($(BLISS_BUILD),)
+ifneq ($(wildcard device/bliss/sepolicy/common/sepolicy.mk),)
 ## We need to be sure the global selinux policies are included
 ## last, to avoid accidental resetting by device configs
-#$(eval include device/bliss/sepolicy/common/sepolicy.mk)
+$(eval include device/bliss/sepolicy/common/sepolicy.mk)
+endif
 endif
 
 # Include any vendor specific config.mk file
