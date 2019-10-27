@@ -563,6 +563,9 @@ endif  # BOARD_USES_PRODUCTIMAGE
 	        echo "# ADDITIONAL PRODUCT PROPERTIES" >> $@; \
 	        echo "#" >> $@; \
 	        echo "ro.build.characteristics=$(TARGET_AAPT_CHARACTERISTICS)" >> $@;
+	        echo "ro.config.notification_sound=$(TARGET_DEFAULT_NOTIFICATION_SOUND)" >> $@;
+	        echo "ro.config.alarm_alert=$(TARGET_DEFAULT_ALARM_ALERT)" >> $@;
+	        echo "ro.config.ringtone=$(TARGET_DEFAULT_RINGTONE)" >> $@;
 	$(hide) $(foreach line,$(FINAL_PRODUCT_PROPERTIES), \
 	    echo "$(line)" >> $@;)
 	$(hide) build/make/tools/post_process_props.py $@
