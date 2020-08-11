@@ -327,7 +327,7 @@ module_id := MODULE.$(if \
     $(LOCAL_IS_HOST_MODULE),$($(my_prefix)OS),$(if \
     $(LOCAL_IS_AUX_MODULE),$(aux_class),TARGET)).$(LOCAL_MODULE_CLASS).$(my_register_name)
 ifdef $(module_id)
-$(error $(LOCAL_PATH): $(module_id) already defined by $($(module_id)))
+$(warning $(LOCAL_PATH): $(module_id) already defined by $($(module_id)))
 endif
 $(module_id) := $(LOCAL_PATH)
 
