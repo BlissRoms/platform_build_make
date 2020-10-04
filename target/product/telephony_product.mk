@@ -18,5 +18,5 @@
 # hardware, and install to the product partition.
 
 # /product packages
-PRODUCT_PACKAGES += \
-    Dialer \
+#PRODUCT_PACKAGES += \
+#    Dialer \

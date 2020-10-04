@@ -24,8 +24,6 @@ PRODUCT_PACKAGES := \
     WAPPushManager
 
 PRODUCT_PACKAGES += \
-    LiveWallpapersPicker \
-    PhotoTable \
     preinstalled-packages-platform-full-base.xml
 
 # Bluetooth:
