@@ -1852,6 +1852,8 @@ $(if $(filter true,$(BOARD_BUILD_SYSTEM_ROOT_IMAGE)),\
 $(hide) echo "root_dir=$(TARGET_ROOT_OUT)" >> $(1)
 $(if $(filter true,$(PRODUCT_USE_DYNAMIC_PARTITION_SIZE)),\
     $(hide) echo "use_dynamic_partition_size=true" >> $(1))
+$(if $(filter true,$(TARGET_HAS_PERSISTENT_RECOVERY)),\
+    $(hide) echo "target_has_persistent_recovery=true" >> $(1))
 $(if $(3),$(hide) $(foreach kv,$(3),echo "$(kv)" >> $(1);))
 endef
 
@@ -2122,14 +2124,16 @@ endif
 #      do bsdiff because boot and recovery will contain different number of entries
 #      (BOARD_INCLUDE_RECOVERY_ACPIO = true).
 
+ifeq ($(TARGET_HAS_PERSISTENT_RECOVERY),true)
+    RECOVERY_RESOURCE_ZIP :=
+else
 ifeq (,$(filter true, $(BOARD_USES_FULL_RECOVERY_IMAGE) $(BOARD_USES_RECOVERY_AS_BOOT) \
   $(BOARD_BUILD_SYSTEM_ROOT_IMAGE) $(BOARD_INCLUDE_RECOVERY_DTBO) $(BOARD_INCLUDE_RECOVERY_ACPIO)))
 # Named '.dat' so we don't attempt to use imgdiff for patching it.
 RECOVERY_RESOURCE_ZIP := $(TARGET_OUT_VENDOR)/etc/recovery-resource.dat
 ALL_DEFAULT_INSTALLED_MODULES += $(RECOVERY_RESOURCE_ZIP)
-else
-RECOVERY_RESOURCE_ZIP :=
 endif
+endif #TARGET_HAS_PERSISTENT_RECOVERY
 
 INSTALLED_RECOVERY_BUILD_PROP_TARGET := $(TARGET_RECOVERY_ROOT_OUT)/prop.default
 
@@ -4316,7 +4320,9 @@ ifneq ($(INSTALLED_VENDOR_BOOTIMAGE_TARGET),)
 	echo "vendor_boot_size=$(BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE)" >> $@
 endif
 ifeq ($(INSTALLED_RECOVERYIMAGE_TARGET),)
+ifneq ($(TARGET_HAS_PERSISTENT_RECOVERY),true)
 	$(hide) echo "no_recovery=true" >> $@
+endif
 endif
 ifdef BOARD_INCLUDE_RECOVERY_DTBO
 	$(hide) echo "include_recovery_dtbo=true" >> $@
@@ -4844,12 +4850,16 @@ ifneq ($(PRODUCT_ODM_BASE_FS_PATH),)
 	$(hide) cp $(PRODUCT_ODM_BASE_FS_PATH) \
 	  $(zip_root)/META/$(notdir $(PRODUCT_ODM_BASE_FS_PATH))
 endif
+
+ifneq ($(TARGET_HAS_PERSISTENT_RECOVERY),true)
 ifeq ($(TARGET_OTA_ALLOW_NON_AB),true)
 ifneq ($(INSTALLED_RECOVERYIMAGE_TARGET),)
 	$(hide) PATH=$(INTERNAL_USERIMAGES_BINARY_PATHS):$$PATH MKBOOTIMG=$(MKBOOTIMG) \
 	    $(MAKE_RECOVERY_PATCH) $(zip_root) $(zip_root)
 endif
 endif
+endif # TARGET_HAS_PERSISTENT_RECOVERY
+
 ifeq ($(AB_OTA_UPDATER),true)
 	@# When using the A/B updater, include the updater config files in the zip.
 	$(hide) cp $(TOPDIR)system/update_engine/update_engine.conf $(zip_root)/META/update_engine_config.txt

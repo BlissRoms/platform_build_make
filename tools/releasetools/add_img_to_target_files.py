@@ -172,7 +172,9 @@ def AddSystem(output_zip, recovery_img=None, boot_img=None):
   if (OPTIONS.rebuild_recovery and not board_uses_vendorimage and
       recovery_img is not None and boot_img is not None):
     logger.info("Building new recovery patch on system at system/vendor")
-    common.MakeRecoveryPatch(OPTIONS.input_tmp, output_sink, recovery_img,
+    target_has_persistent_recovery = (OPTIONS.info_dict.get("target_has_persistent_recovery") == "true")
+    if not target_has_persistent_recovery:
+      common.MakeRecoveryPatch(OPTIONS.input_tmp, output_sink, recovery_img,
                              boot_img, info_dict=OPTIONS.info_dict)
 
   block_list = OutputFile(output_zip, OPTIONS.input_tmp, "IMAGES", "system.map")
@@ -221,7 +223,9 @@ def AddVendor(output_zip, recovery_img=None, boot_img=None):
   if (OPTIONS.rebuild_recovery and board_uses_vendorimage and
       recovery_img is not None and boot_img is not None):
     logger.info("Building new recovery patch on vendor")
-    common.MakeRecoveryPatch(OPTIONS.input_tmp, output_sink, recovery_img,
+    target_has_persistent_recovery = (OPTIONS.info_dict.get("target_has_persistent_recovery") == "true")
+    if not target_has_persistent_recovery:
+      common.MakeRecoveryPatch(OPTIONS.input_tmp, output_sink, recovery_img,
                              boot_img, info_dict=OPTIONS.info_dict)
 
   block_list = OutputFile(output_zip, OPTIONS.input_tmp, "IMAGES", "vendor.map")

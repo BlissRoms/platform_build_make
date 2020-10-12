@@ -39,6 +39,9 @@ def main(argv):
 
   OPTIONS.info_dict = common.LoadInfoDict(input_dir)
 
+  target_has_persistent_recovery = OPTIONS.info_dict.get(
+      "target_has_persistent_recovery") == "true"
+
   recovery_img = common.GetBootableImage("recovery.img", "recovery.img",
                                          input_dir, "RECOVERY")
   boot_img = common.GetBootableImage("boot.img", "boot.img",
@@ -66,7 +69,8 @@ def main(argv):
                            *fn.split("/")), "wb") as f:
       f.write(data)
 
-  common.MakeRecoveryPatch(input_dir, output_sink, recovery_img, boot_img)
+  if not target_has_persistent_recovery:
+    common.MakeRecoveryPatch(input_dir, output_sink, recovery_img, boot_img)
 
 
 if __name__ == '__main__':

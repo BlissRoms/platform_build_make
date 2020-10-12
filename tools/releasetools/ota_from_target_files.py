@@ -758,7 +758,9 @@ def WriteFullOTAPackage(input_zip, output_file):
       metadata=metadata,
       info_dict=OPTIONS.info_dict)
 
-  assert HasRecoveryPatch(input_zip, info_dict=OPTIONS.info_dict)
+  target_has_persistent_recovery = (OPTIONS.info_dict.get("target_has_persistent_recovery") == "true")
+  if not target_has_persistent_recovery:
+    assert HasRecoveryPatch(input_zip, info_dict=OPTIONS.info_dict)
 
   # Assertions (e.g. downgrade check, device properties check).
   #ts = target_info.GetBuildProp("ro.build.date.utc")
