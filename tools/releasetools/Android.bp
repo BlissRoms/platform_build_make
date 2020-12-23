@@ -190,6 +190,7 @@ python_library_host {
         "lz4",
         "mkbootfs",
         "signapk",
+        "zipalign",
     ],
 }
 
