@@ -713,14 +713,11 @@ def ExtractFromInputFile(input_file, fn):
 class RamdiskFormat(object):
   LZ4 = 1
   GZ = 2
-  XZ = 3
 
 
 def _GetRamdiskFormat(info_dict):
   if info_dict.get('lz4_ramdisks') == 'true':
     ramdisk_format = RamdiskFormat.LZ4
-  if info_dict.get('xz_ramdisks') == 'true':
-    ramdisk_format = RamdiskFormat.XZ
   else:
     ramdisk_format = RamdiskFormat.GZ
   return ramdisk_format
@@ -1536,9 +1533,6 @@ def _MakeRamdisk(sourcedir, fs_config_file=None,
   if ramdisk_format == RamdiskFormat.LZ4:
     p2 = Run(["lz4", "-l", "-12", "--favor-decSpeed"], stdin=p1.stdout,
              stdout=ramdisk_img.file.fileno())
-  elif ramdisk_format == RamdiskFormat.XZ:
-    p2 = Run(["xz", "-f", "-c", "--check=crc32", "--lzma2=dict=32MiB"], stdin=p1.stdout,
-             stdout=ramdisk_img.file.fileno())
   elif ramdisk_format == RamdiskFormat.GZ:
     p2 = Run(["minigzip"], stdin=p1.stdout, stdout=ramdisk_img.file.fileno())
   else:
@@ -1624,11 +1618,6 @@ def _BuildBootableImage(image_name, sourcedir, fs_config_file, info_dict=None,
   if os.access(fn, os.F_OK):
     cmd.append("--pagesize")
     cmd.append(open(fn).read().rstrip("\n"))
-
-  fn = os.path.join(sourcedir, "dt")
-  if os.access(fn, os.F_OK):
-    cmd.append("--dt")
-    cmd.append(fn)
 
   if partition_name == "recovery":
     args = info_dict.get("recovery_mkbootimg_args")
@@ -2588,7 +2577,6 @@ class PasswordManager(object):
   def __init__(self):
     self.editor = os.getenv("EDITOR")
     self.pwfile = os.getenv("ANDROID_PW_FILE")
-    self.secure_storage_cmd = os.getenv("ANDROID_SECURE_STORAGE_CMD", None)
 
   def GetPasswords(self, items):
     """Get passwords corresponding to each string in 'items',
@@ -2608,23 +2596,9 @@ class PasswordManager(object):
       missing = []
       for i in items:
         if i not in current or not current[i]:
-          # Attempt to load using ANDROID_SECURE_STORAGE_CMD
-          if self.secure_storage_cmd:
-            try:
-              os.environ["TMP__KEY_FILE_NAME"] = str(i)
-              ps = subprocess.Popen(self.secure_storage_cmd, shell=True, stdout=subprocess.PIPE)
-              output = ps.communicate()[0]
-              if ps.returncode == 0:
-                current[i] = output
-            except Exception as e:
-              print(e)
-              pass
-          if i not in current or not current[i]:
-            missing.append(i)
+          missing.append(i)
       # Are all the passwords already in the file?
       if not missing:
-        if "ANDROID_SECURE_STORAGE_CMD" in os.environ:
-          del os.environ["ANDROID_SECURE_STORAGE_CMD"]
         return current
 
       for i in missing:
