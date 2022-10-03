@@ -36,6 +36,7 @@ PRODUCT_PACKAGES += \
 
 ifeq ($(BLISS_BUILD),)
 PRODUCT_PACKAGES += \
+    Camera2 \
     LatinIME
 endif
 
