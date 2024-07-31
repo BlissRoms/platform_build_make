@@ -368,6 +368,8 @@ $(call add_json_list, OemProperties, $(PRODUCT_OEM_PROPERTIES))
 # Unsure about this
 $(call add_json_list, BlissDevice, $(TARGET_DEVICE))
 
+$(call add_json_list, SystemPropFiles, $(TARGET_SYSTEM_PROP))
+
 # Do not set ArtTargetIncludeDebugBuild into any value if PRODUCT_ART_TARGET_INCLUDE_DEBUG_BUILD is not set,
 # to have the same behavior from runtime_libart.mk.
 ifneq ($(PRODUCT_ART_TARGET_INCLUDE_DEBUG_BUILD),)
