@@ -371,6 +371,7 @@ $(call add_json_list, BlissDevice, $(TARGET_DEVICE))
 $(call add_json_list, SystemPropFiles, $(TARGET_SYSTEM_PROP))
 $(call add_json_list, SystemExtPropFiles, $(TARGET_SYSTEM_EXT_PROP))
 $(call add_json_list, ProductPropFiles, $(TARGET_PRODUCT_PROP))
+$(call add_json_list, OdmPropFiles, $(TARGET_ODM_PROP))
 
 # Do not set ArtTargetIncludeDebugBuild into any value if PRODUCT_ART_TARGET_INCLUDE_DEBUG_BUILD is not set,
 # to have the same behavior from runtime_libart.mk.
