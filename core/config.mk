@@ -453,7 +453,6 @@ endif
 # See envsetup.mk for a description of SCAN_EXCLUDE_DIRS
 FIND_LEAVES_EXCLUDES := $(addprefix --prune=, $(SCAN_EXCLUDE_DIRS) .repo .git)
 
--include vendor/extra/BoardConfigExtra.mk
 ifneq ($(BLISS_BUILD),)
 include vendor/bliss/config/BoardConfigBliss.mk
 endif
