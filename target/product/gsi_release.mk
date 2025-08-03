@@ -27,8 +27,8 @@
 #
 
 BUILDING_GSI := true
-ifneq ($(filter lineage_gsi_%,$(TARGET_PRODUCT)),)
-BUILDING_LINEAGE_GSI := true
+ifneq ($(filter bliss_gsi_%,$(TARGET_PRODUCT)),)
+BUILDING_BLISS_GSI := true
 endif
 
 PRODUCT_ARTIFACT_PATH_REQUIREMENT_ALLOWED_LIST += \
