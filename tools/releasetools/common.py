@@ -675,7 +675,7 @@ class BuildInfo(object):
     return self.GetBuildProp(key)
 
   def GetPartitionFingerprint(self, partition):
-    return self._partition_fingerprints.get(partition, None)
+    return self._partition_fingerprints.get(partition, self.CalculateFingerprint())
 
   def CalculatePartitionFingerprint(self, partition):
     try:
@@ -1831,7 +1831,12 @@ def _BuildBootableImage(image_name, sourcedir, fs_config_file,
   if has_ramdisk:
     cmd.extend(["--ramdisk", ramdisk_img.name])
 
-  cmd.extend(["--output", img.name])
+  img_unsigned = None
+  if info_dict.get("vboot"):
+    img_unsigned = tempfile.NamedTemporaryFile()
+    cmd.extend(["--output", img_unsigned.name])
+  else:
+    cmd.extend(["--output", img.name])
 
   if partition_name == "recovery":
     if info_dict.get("include_recovery_dtbo") == "true":
@@ -1842,6 +1847,28 @@ def _BuildBootableImage(image_name, sourcedir, fs_config_file,
       cmd.extend(["--recovery_acpio", fn])
 
   RunAndCheckOutput(cmd)
+
+  # Sign the image if vboot is non-empty.
+  if info_dict.get("vboot"):
+    path = "/" + partition_name
+    img_keyblock = tempfile.NamedTemporaryFile()
+    # We have switched from the prebuilt futility binary to using the tool
+    # (futility-host) built from the source. Override the setting in the old
+    # TF.zip.
+    futility = info_dict["futility"]
+    if futility.startswith("prebuilts/"):
+      futility = "futility-host"
+    cmd = [info_dict["vboot_signer_cmd"], futility,
+           img_unsigned.name, info_dict["vboot_key"] + ".vbpubk",
+           info_dict["vboot_key"] + ".vbprivk",
+           info_dict["vboot_subkey"] + ".vbprivk",
+           img_keyblock.name,
+           img.name]
+    RunAndCheckOutput(cmd)
+
+    # Clean up the temp files.
+    img_unsigned.close()
+    img_keyblock.close()
 
   # AVB: if enabled, calculate and add hash to boot.img or recovery.img.
   if info_dict.get("avb_enable") == "true":
@@ -3841,36 +3868,17 @@ def MakeRecoveryPatch(input_dir, output_sink, recovery_img, boot_img,
   if board_uses_vendorimage:
     # In this case, the output sink is rooted at VENDOR
     recovery_img_path = "etc/recovery.img"
-    recovery_resource_dat_path = "VENDOR/etc/recovery-resource.dat"
     sh_dir = "bin"
   else:
     # In this case the output sink is rooted at SYSTEM
     recovery_img_path = "vendor/etc/recovery.img"
-    recovery_resource_dat_path = "SYSTEM/vendor/etc/recovery-resource.dat"
     sh_dir = "vendor/bin"
 
   if full_recovery_image:
     output_sink(recovery_img_path, recovery_img.data)
 
   else:
-    include_recovery_dtbo = info_dict.get("include_recovery_dtbo") == "true"
-    include_recovery_acpio = info_dict.get("include_recovery_acpio") == "true"
-    path = os.path.join(input_dir, recovery_resource_dat_path)
-    # Use bsdiff to handle mismatching entries (Bug: 72731506)
-    if include_recovery_dtbo or include_recovery_acpio:
-      diff_program = ["bsdiff"]
-      bonus_args = ""
-      assert not os.path.exists(path)
-    else:
-      diff_program = ["imgdiff"]
-      if os.path.exists(path):
-        diff_program.append("-b")
-        diff_program.append(path)
-        bonus_args = "--bonus /vendor/etc/recovery-resource.dat"
-      else:
-        bonus_args = ""
-
-    d = Difference(recovery_img, boot_img, diff_program=diff_program)
+    d = Difference(recovery_img, boot_img)
     _, _, patch = d.ComputePatch()
     output_sink("recovery-from-boot.p", patch)
 
@@ -3908,7 +3916,7 @@ fi
   else:
     sh = """#!/vendor/bin/sh
 if ! applypatch --check %(recovery_type)s:%(recovery_device)s:%(recovery_size)d:%(recovery_sha1)s; then
-  applypatch %(bonus_args)s \\
+  applypatch \\
           --patch /vendor/recovery-from-boot.p \\
           --source %(boot_type)s:%(boot_device)s:%(boot_size)d:%(boot_sha1)s \\
           --target %(recovery_type)s:%(recovery_device)s:%(recovery_size)d:%(recovery_sha1)s && \\
@@ -3924,8 +3932,7 @@ fi
        'boot_type': boot_type,
        'boot_device': boot_device + '$(getprop ro.boot.slot_suffix)',
        'recovery_type': recovery_type,
-       'recovery_device': recovery_device + '$(getprop ro.boot.slot_suffix)',
-       'bonus_args': bonus_args}
+       'recovery_device': recovery_device + '$(getprop ro.boot.slot_suffix)'}
 
   # The install script location moved from /system/etc to /system/bin in the L
   # release. In the R release it is in VENDOR/bin or SYSTEM/vendor/bin.
@@ -3975,6 +3982,9 @@ class DynamicPartitionsDifference(object):
                source_info_dict=None):
     if progress_dict is None:
       progress_dict = {}
+
+    self._have_super_empty = \
+      info_dict.get("build_super_empty_partition") == "true"
 
     self._remove_all_before_apply = False
     if source_info_dict is None:
@@ -4072,8 +4082,13 @@ class DynamicPartitionsDifference(object):
     ZipWrite(output_zip, op_list_path, "dynamic_partitions_op_list")
 
     script.Comment('Update dynamic partition metadata')
-    script.AppendExtra('assert(update_dynamic_partitions('
-                       'package_extract_file("dynamic_partitions_op_list")));')
+    if self._have_super_empty:
+      script.AppendExtra('assert(update_dynamic_partitions('
+                        'package_extract_file("dynamic_partitions_op_list"), '
+                        'package_extract_file("unsparse_super_empty.img")));')
+    else:
+      script.AppendExtra('assert(update_dynamic_partitions('
+                        'package_extract_file("dynamic_partitions_op_list")));')
 
     if write_verify_script:
       for p, u in self._partition_updates.items():

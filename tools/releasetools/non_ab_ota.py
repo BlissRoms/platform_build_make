@@ -186,6 +186,8 @@ def WriteFullOTAPackage(input_zip, output_file):
 
   recovery_img = common.GetBootableImage("recovery.img", "recovery.img",
                                          OPTIONS.input_tmp, "RECOVERY")
+  common.CheckSize(recovery_img.data, "recovery.img", target_info)
+  common.ZipWriteStr(output_zip, "recovery.img", recovery_img.data)
   if OPTIONS.two_step:
     if not target_info.get("multistage_support"):
       assert False, "two-step packages not supported by this build"
@@ -193,7 +195,6 @@ def WriteFullOTAPackage(input_zip, output_file):
     assert fs.fs_type.upper() == "EMMC", \
         "two-step packages only supported on devices with EMMC /misc partitions"
     bcb_dev = {"bcb_dev": fs.device}
-    common.ZipWriteStr(output_zip, "recovery.img", recovery_img.data)
     script.AppendExtra("""
 if get_stage("%(bcb_dev)s") == "2/3" then
 """ % bcb_dev)
@@ -232,6 +233,15 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   progress_dict["system"] = system_progress
 
   if target_info.get('use_dynamic_partitions') == "true":
+    # Add non-sparse super empty image to OTA package if it exists
+    if target_info.get('build_super_empty_partition') == "true":
+      unsparse_super_empty_image_name = "unsparse_super_empty.img"
+      unsparse_super_empty_image_path = os.path.join(OPTIONS.input_tmp, "IMAGES",
+          unsparse_super_empty_image_name)
+      unsparse_super_empty_image = common.File.FromLocalFile(
+          unsparse_super_empty_image_name, unsparse_super_empty_image_path)
+      common.ZipWriteStr(output_zip, unsparse_super_empty_image_name,
+          unsparse_super_empty_image.data)
     # Use empty source_info_dict to indicate that all partitions / groups must
     # be re-added.
     dynamic_partitions_diff = common.DynamicPartitionsDifference(
